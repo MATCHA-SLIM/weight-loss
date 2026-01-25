@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <title>ভিয়েতনাম : MCQ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .question {
+            background: #ffffff;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .options button {
+            display: block;
+            width: 100%;
+            margin: 6px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #f9f9f9;
+            cursor: pointer;
+            text-align: left;
+        }
+        .options button:hover {
+            background: #e9e9e9;
+        }
+        .correct {
+            background: #c8f7c5 !important;
+            border-color: #2ecc71;
+        }
+        .wrong {
+            background: #f7c5c5 !important;
+            border-color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+
+<h1>ভিয়েতনাম : MCQ</h1>
+
+<div class="question">
+    <p><strong>১. ভিয়েতনাম কোন অঞ্চলে অবস্থিত?</strong></p>
+    <div class="options">
+        <button onclick="checkAnswer(this, false)">A. দক্ষিণ এশিয়া</button>
+        <button onclick="checkAnswer(this, false)">B. পূর্ব এশিয়া</button>
+        <button onclick="checkAnswer(this, true)">C. দক্ষিণ–পূর্ব এশিয়া</button>
+        <button onclick="checkAnswer(this, false)">D. মধ্য এশিয়া</button>
+    </div>
+</div>
+
+<div class="question">
+    <p><strong>২. প্রাচীনকালে ভিয়েতনাম দীর্ঘ সময় কোন দেশের প্রভাবাধীন ছিল?</strong></p>
+    <div class="options">
+        <button onclick="checkAnswer(this, false)">A. জাপান</button>
+        <button onclick="checkAnswer(this, false)">B. কোরিয়া</button>
+        <button onclick="checkAnswer(this, true)">C. চীন</button>
+        <button onclick="checkAnswer(this, false)">D. থাইল্যান্ড</button>
+    </div>
+</div>
+
+<div class="question">
+    <p><strong>৩. উনবিংশ শতকে ভিয়েতনাম কোন দেশের উপনিবেশে পরিণত হয়?</strong></p>
+    <div class="options">
+        <button onclick="checkAnswer(this, false)">A. ব্রিটেন</button>
+        <button onclick="checkAnswer(this, true)">B. ফ্রান্স</button>
+        <button onclick="checkAnswer(this, false)">C. নেদারল্যান্ডস</button>
+        <button onclick="checkAnswer(this, false)">D. পর্তুগাল</button>
+    </div>
+</div>
+
+<script>
+    function checkAnswer(button, isCorrect) {
+        const buttons = button.parentElement.querySelectorAll("button");
+        buttons.forEach(btn => btn.disabled = true);
+
+        if (isCorrect) {
+            button.classList.add("correct");
+        } else {
+            button.classList.add("wrong");
+            buttons.forEach(btn => {
+                if (btn.getAttribute("onclick").includes("true")) {
+                    btn.classList.add("correct");
+                }
+            });
+        }
+    }
+</script>
+
+</body>
+</html>
