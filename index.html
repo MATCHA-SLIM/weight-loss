@@ -1,98 +1,212 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <title>ভিয়েতনাম : MCQ</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-        }
-        .question {
-            background: #ffffff;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-        .options button {
-            display: block;
-            width: 100%;
-            margin: 6px 0;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background: #f9f9f9;
-            cursor: pointer;
-            text-align: left;
-        }
-        .options button:hover {
-            background: #e9e9e9;
-        }
-        .correct {
-            background: #c8f7c5 !important;
-            border-color: #2ecc71;
-        }
-        .wrong {
-            background: #f7c5c5 !important;
-            border-color: #e74c3c;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ভিয়েতনাম MCQ Quiz</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f2f4f8;
+    margin:0;
+    padding:0;
+}
+.container{
+    max-width:600px;
+    margin:30px auto;
+    background:#fff;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,.1);
+}
+h1{
+    text-align:center;
+    margin-bottom:10px;
+}
+#score{
+    text-align:center;
+    font-weight:bold;
+    margin-bottom:15px;
+}
+.question{
+    font-size:18px;
+    margin-bottom:15px;
+}
+.options button{
+    width:100%;
+    padding:12px;
+    margin:6px 0;
+    border:1px solid #ccc;
+    border-radius:6px;
+    background:#f9f9f9;
+    text-align:left;
+    cursor:pointer;
+}
+.options button:hover{
+    background:#eee;
+}
+.correct{
+    background:#c8f7c5 !important;
+    border-color:#2ecc71;
+}
+.wrong{
+    background:#f7c5c5 !important;
+    border-color:#e74c3c;
+}
+.controls{
+    display:flex;
+    justify-content:space-between;
+    margin-top:15px;
+}
+.controls button{
+    padding:10px 18px;
+    border:none;
+    border-radius:6px;
+    background:#3498db;
+    color:#fff;
+    cursor:pointer;
+}
+.controls button:disabled{
+    background:#aaa;
+}
+@media(max-width:500px){
+    .container{
+        margin:10px;
+    }
+}
+</style>
 </head>
+
 <body>
 
-<h1>ভিয়েতনাম : MCQ</h1>
+<div class="container">
+    <h1>ভিয়েতনাম : MCQ</h1>
+    <div id="score">Score: 0 / 13</div>
 
-<div class="question">
-    <p><strong>১. ভিয়েতনাম কোন অঞ্চলে অবস্থিত?</strong></p>
-    <div class="options">
-        <button onclick="checkAnswer(this, false)">A. দক্ষিণ এশিয়া</button>
-        <button onclick="checkAnswer(this, false)">B. পূর্ব এশিয়া</button>
-        <button onclick="checkAnswer(this, true)">C. দক্ষিণ–পূর্ব এশিয়া</button>
-        <button onclick="checkAnswer(this, false)">D. মধ্য এশিয়া</button>
+    <div id="quiz">
+        <div class="question"></div>
+        <div class="options"></div>
     </div>
-</div>
 
-<div class="question">
-    <p><strong>২. প্রাচীনকালে ভিয়েতনাম দীর্ঘ সময় কোন দেশের প্রভাবাধীন ছিল?</strong></p>
-    <div class="options">
-        <button onclick="checkAnswer(this, false)">A. জাপান</button>
-        <button onclick="checkAnswer(this, false)">B. কোরিয়া</button>
-        <button onclick="checkAnswer(this, true)">C. চীন</button>
-        <button onclick="checkAnswer(this, false)">D. থাইল্যান্ড</button>
-    </div>
-</div>
-
-<div class="question">
-    <p><strong>৩. উনবিংশ শতকে ভিয়েতনাম কোন দেশের উপনিবেশে পরিণত হয়?</strong></p>
-    <div class="options">
-        <button onclick="checkAnswer(this, false)">A. ব্রিটেন</button>
-        <button onclick="checkAnswer(this, true)">B. ফ্রান্স</button>
-        <button onclick="checkAnswer(this, false)">C. নেদারল্যান্ডস</button>
-        <button onclick="checkAnswer(this, false)">D. পর্তুগাল</button>
+    <div class="controls">
+        <button onclick="prevQuestion()">Previous</button>
+        <button onclick="nextQuestion()">Next</button>
     </div>
 </div>
 
 <script>
-    function checkAnswer(button, isCorrect) {
-        const buttons = button.parentElement.querySelectorAll("button");
-        buttons.forEach(btn => btn.disabled = true);
+const questions = [
+{
+q:"ভিয়েতনাম কোন অঞ্চলে অবস্থিত?",
+o:["দক্ষিণ এশিয়া","পূর্ব এশিয়া","দক্ষিণ–পূর্ব এশিয়া","মধ্য এশিয়া"],
+a:2
+},
+{
+q:"প্রাচীনকালে ভিয়েতনাম দীর্ঘ সময় কোন দেশের প্রভাবাধীন ছিল?",
+o:["জাপান","কোরিয়া","চীন","থাইল্যান্ড"],
+a:2
+},
+{
+q:"উনবিংশ শতকে ভিয়েতনাম কোন দেশের উপনিবেশে পরিণত হয়?",
+o:["ব্রিটেন","ফ্রান্স","নেদারল্যান্ডস","পর্তুগাল"],
+a:1
+},
+{
+q:"ভিয়েতনামের স্বাধীনতা আন্দোলনের প্রধান নেতা কে ছিলেন?",
+o:["লি ডাক থো","ভো নুয়েন জিয়াপ","হো চি মিন","নুগুয়েন ফু ত্রং"],
+a:2
+},
+{
+q:"হো চি মিন কবে ভিয়েতনামের স্বাধীনতা ঘোষণা করেন?",
+o:["১৯৩৯","১৯৪৫","১৯৫৪","১৯৭৫"],
+a:1
+},
+{
+q:"কোন চুক্তির মাধ্যমে ভিয়েতনাম উত্তর ও দক্ষিণে বিভক্ত হয়?",
+o:["প্যারিস চুক্তি","ভার্সাই চুক্তি","জেনেভা চুক্তি","সাইগন চুক্তি"],
+a:2
+},
+{
+q:"উত্তর ভিয়েতনামের রাজধানী ছিল—",
+o:["সাইগন","হুয়ে","দা নাং","হ্যানয়"],
+a:3
+},
+{
+q:"ভিয়েতনাম যুদ্ধ কত সাল পর্যন্ত স্থায়ী হয়?",
+o:["১৯৬৮","১৯৭০","১৯৭৩","১৯৭৫"],
+a:3
+},
+{
+q:"ভিয়েতনাম যুদ্ধে দক্ষিণ ভিয়েতনামকে কোন দেশ সমর্থন করেছিল?",
+o:["চীন","সোভিয়েত ইউনিয়ন","যুক্তরাষ্ট্র","কিউবা"],
+a:2
+},
+{
+q:"“The Tiger of Bicycle” উপাধি দেওয়া হয়েছিল কেন?",
+o:["উন্নত প্রযুক্তির জন্য","নৌবাহিনীর শক্তির জন্য","সাধারণ সাইকেল ও সীমিত অস্ত্র দিয়ে যুদ্ধ","বিমান বাহিনীর দক্ষতা"],
+a:2
+},
+{
+q:"ভিয়েতনাম যুদ্ধের শান্তি আলোচনায় ভূমিকা রাখেন কে?",
+o:["হো চি মিন","লি ডাক থো","নেলসন ম্যান্ডেলা","মাও সেতুং"],
+a:1
+},
+{
+q:"ভিয়েতনাম কবে পুনরায় একত্রিত হয়?",
+o:["১৯৭৫ সালের ৩০ এপ্রিল","১৯৭৬ সালের ২ জুলাই","১৯৭৩ সালের ২৭ জানুয়ারি","১৯৫৪ সালের ২১ জুলাই"],
+a:1
+},
+{
+q:"একত্রিত ভিয়েতনামের রাষ্ট্রীয় নাম কী?",
+o:["গণপ্রজাতন্ত্রী ভিয়েতনাম","ভিয়েতনাম ফেডারেশন","ভিয়েতনাম সমাজতান্ত্রিক প্রজাতন্ত্র","গ্রেটার ভিয়েতনাম"],
+a:2
+}
+];
 
-        if (isCorrect) {
-            button.classList.add("correct");
-        } else {
-            button.classList.add("wrong");
-            buttons.forEach(btn => {
-                if (btn.getAttribute("onclick").includes("true")) {
-                    btn.classList.add("correct");
-                }
-            });
-        }
+let index = 0;
+let score = 0;
+let answered = Array(13).fill(false);
+
+const qEl = document.querySelector(".question");
+const oEl = document.querySelector(".options");
+const scoreEl = document.getElementById("score");
+
+function loadQuestion(){
+    qEl.innerHTML = (index+1)+". "+questions[index].q;
+    oEl.innerHTML = "";
+    questions[index].o.forEach((opt,i)=>{
+        const btn = document.createElement("button");
+        btn.innerText = opt;
+        btn.onclick = ()=>checkAnswer(i,btn);
+        oEl.appendChild(btn);
+    });
+}
+function checkAnswer(i,btn){
+    if(answered[index]) return;
+    answered[index]=true;
+    if(i===questions[index].a){
+        btn.classList.add("correct");
+        score++;
+    }else{
+        btn.classList.add("wrong");
+        oEl.children[questions[index].a].classList.add("correct");
     }
+    scoreEl.innerText = "Score: "+score+" / 13";
+}
+function nextQuestion(){
+    if(index<questions.length-1){
+        index++;
+        loadQuestion();
+    }
+}
+function prevQuestion(){
+    if(index>0){
+        index--;
+        loadQuestion();
+    }
+}
+loadQuestion();
 </script>
 
 </body>
