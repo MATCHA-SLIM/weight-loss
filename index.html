@@ -61,6 +61,21 @@ button{cursor:pointer}
 @media(max-width:500px){
     .container{margin:10px}
 }
+    .review-item{
+  border:1px solid #ddd;
+  padding:10px;
+  margin:10px 0;
+  border-radius:6px;
+}
+.review-item.correct{
+  background:#e6fffa;
+}
+.review-item.wrong{
+  background:#ffe6e6;
+}
+.review-item p{
+  margin:5px 0;
+}
 </style>
 </head>
 
@@ -98,6 +113,12 @@ button{cursor:pointer}
 <p id="wrong"></p>
 <p id="score"></p>
 <p id="accuracy"></p>
+<button onclick="restart()">🔄 আবার শুরু করো</button>
+</div>
+<!-- REVIEW -->
+<div class="container hidden" id="reviewBox">
+<h2>📝 Answer Review</h2>
+<div id="reviewList"></div>
 <button onclick="restart()">🔄 আবার শুরু করো</button>
 </div>
 
@@ -174,11 +195,20 @@ function startTimer(){
  },1000);
 }
 
-// FINISH
 function finish(){
  let score=0;
+ let reviewHTML="";
+
  answers.forEach((a,idx)=>{
-   if(a===questions[idx].a) score++;
+   let isCorrect = a===questions[idx].a;
+   if(isCorrect) score++;
+
+   reviewHTML+=`
+   <div class="review-item ${isCorrect?"correct":"wrong"}">
+     <p><b>প্রশ্ন ${idx+1}:</b> ${questions[idx].q}</p>
+     <p>🟢 সঠিক উত্তর: ${questions[idx].o[questions[idx].a]}</p>
+     <p>🔵 তোমার উত্তর: ${a!==null ? questions[idx].o[a] : "উত্তর দাওনি"}</p>
+   </div>`;
  });
 
  quizBox.classList.add("hidden");
@@ -189,6 +219,10 @@ function finish(){
  wrong.innerText="❌ ভুল: "+(questions.length-score);
  scoreEl.innerText=`মোট স্কোর: ${score}/${questions.length}`;
  accuracy.innerText=`Accuracy: ${((score/questions.length)*100).toFixed(2)}%`;
+
+ // show review
+ document.getElementById("reviewBox").classList.remove("hidden");
+ document.getElementById("reviewList").innerHTML=reviewHTML;
 }
 
 // RESTART
