@@ -76,6 +76,11 @@ button{cursor:pointer}
 .review-item p{
   margin:5px 0;
 }
+    .nav button.answered{
+    background:#2563eb;
+    color:#fff;
+    border-color:#2563eb;
+}
 </style>
 </head>
 
@@ -174,15 +179,20 @@ function answer(a){
  load();
 }
 
-// NAV
+// NAV (answered question = blue)
 function navigator(){
  let n="";
  for(let j=0;j<questions.length;j++){
-   n+=`<button onclick="go(${j})">${j+1}</button>`;
+   let cls = answers[j] !== null ? "answered" : "";
+   n+=`<button class="${cls}" onclick="go(${j})">${j+1}</button>`;
  }
  nav.innerHTML=n;
 }
-function go(x){i=x;load();}
+
+function go(x){
+ i=x;
+ load();
+}
 
 // TIMER
 function startTimer(){
