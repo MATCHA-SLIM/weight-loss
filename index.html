@@ -24,9 +24,7 @@ input,button{
     padding:10px;
     margin:5px 0;
 }
-button{
-    cursor:pointer;
-}
+button{cursor:pointer}
 .hidden{display:none}
 .top{
     display:flex;
@@ -39,6 +37,10 @@ button{
     text-align:left;
     border:1px solid #bbb;
     background:#f9f9f9;
+}
+.options button.selected{
+    background:#dbeafe;
+    border-color:#2563eb;
 }
 .correct{background:#c8f7c5!important}
 .wrong{background:#f7c5c5!important}
@@ -100,7 +102,6 @@ button{
 </div>
 
 <script>
-// QUESTIONS
 const questions=[
 {q:"ভিয়েতনাম কোন অঞ্চলে অবস্থিত?",o:["দক্ষিণ এশিয়া","পূর্ব এশিয়া","দক্ষিণ–পূর্ব এশিয়া","মধ্য এশিয়া"],a:2},
 {q:"প্রাচীনকালে ভিয়েতনাম কোন দেশের প্রভাবাধীন ছিল?",o:["জাপান","কোরিয়া","চীন","থাইল্যান্ড"],a:2},
@@ -117,53 +118,48 @@ const questions=[
 {q:"রাষ্ট্রীয় নাম কী?",o:["গণপ্রজাতন্ত্রী","ফেডারেশন","সমাজতান্ত্রিক প্রজাতন্ত্র","গ্রেটার"],a:2}
 ];
 
-// STATE
-let i=0,answers=[],score=0,time=300;
-let student="";
+let i=0,answers=new Array(questions.length).fill(null);
+let time=300,student="";
 
-// LOGIN
+// START
 function startExam(){
  student=document.getElementById("name").value;
  if(!student){alert("নাম লেখো");return;}
- document.getElementById("loginBox").classList.add("hidden");
- document.getElementById("quizBox").classList.remove("hidden");
+ loginBox.classList.add("hidden");
+ quizBox.classList.remove("hidden");
  load();
  startTimer();
 }
 
 // LOAD QUESTION
 function load(){
- document.getElementById("qno").innerText=`প্রশ্ন ${i+1}/${questions.length}`;
+ qno.innerText=`প্রশ্ন ${i+1}/${questions.length}`;
  document.querySelector(".question").innerText=questions[i].q;
- let opt="";
+
+ let html="";
  questions[i].o.forEach((x,j)=>{
-   let cls="";
-   if(answers[i]!=null){
-     if(j===questions[i].a) cls="correct";
-     if(j===answers[i] && j!==questions[i].a) cls="wrong";
-   }
-   opt+=`<button class="${cls}" onclick="answer(${j})">${x}</button>`;
+   let cls=answers[i]===j?"selected":"";
+   html+=`<button class="${cls}" onclick="answer(${j})">${x}</button>`;
  });
- document.querySelector(".options").innerHTML=opt;
- document.getElementById("bar").style.width=((answers.filter(x=>x!=null).length/questions.length)*100)+"%";
+ document.querySelector(".options").innerHTML=html;
+
+ bar.style.width=((answers.filter(x=>x!==null).length/questions.length)*100)+"%";
  navigator();
 }
 
-// ANSWER
+// ANSWER (change allowed)
 function answer(a){
- if(answers[i]!=null) return;
  answers[i]=a;
- if(a===questions[i].a) score++;
  load();
 }
 
-// NAVIGATOR
+// NAV
 function navigator(){
  let n="";
  for(let j=0;j<questions.length;j++){
    n+=`<button onclick="go(${j})">${j+1}</button>`;
  }
- document.getElementById("nav").innerHTML=n;
+ nav.innerHTML=n;
 }
 function go(x){i=x;load();}
 
@@ -172,7 +168,7 @@ function startTimer(){
  let t=setInterval(()=>{
    let m=Math.floor(time/60);
    let s=time%60;
-   document.getElementById("timer").innerText=`সময় ${m}:${String(s).padStart(2,"0")}`;
+   timer.innerText=`সময় ${m}:${String(s).padStart(2,"0")}`;
    time--;
    if(time<0){clearInterval(t);finish();}
  },1000);
@@ -180,17 +176,37 @@ function startTimer(){
 
 // FINISH
 function finish(){
- document.getElementById("quizBox").classList.add("hidden");
- document.getElementById("resultBox").classList.remove("hidden");
- document.getElementById("student").innerText="পরীক্ষার্থী: "+student;
- document.getElementById("correct").innerText="✅ সঠিক: "+score;
- document.getElementById("wrong").innerText="❌ ভুল: "+(questions.length-score);
- document.getElementById("score").innerText=`মোট স্কোর: ${score}/${questions.length}`;
- document.getElementById("accuracy").innerText=`Accuracy: ${((score/questions.length)*100).toFixed(2)}%`;
+ let score=0;
+ answers.forEach((a,idx)=>{
+   if(a===questions[idx].a) score++;
+ });
+
+ quizBox.classList.add("hidden");
+ resultBox.classList.remove("hidden");
+
+ studentEl.innerText="পরীক্ষার্থী: "+student;
+ correct.innerText="✅ সঠিক: "+score;
+ wrong.innerText="❌ ভুল: "+(questions.length-score);
+ scoreEl.innerText=`মোট স্কোর: ${score}/${questions.length}`;
+ accuracy.innerText=`Accuracy: ${((score/questions.length)*100).toFixed(2)}%`;
 }
 
 // RESTART
 function restart(){location.reload();}
+
+// shortcuts
+const loginBox=document.getElementById("loginBox");
+const quizBox=document.getElementById("quizBox");
+const resultBox=document.getElementById("resultBox");
+const qno=document.getElementById("qno");
+const timer=document.getElementById("timer");
+const bar=document.getElementById("bar");
+const nav=document.getElementById("nav");
+const studentEl=document.getElementById("student");
+const correct=document.getElementById("correct");
+const wrong=document.getElementById("wrong");
+const scoreEl=document.getElementById("score");
+const accuracy=document.getElementById("accuracy");
 </script>
 
 </body>
