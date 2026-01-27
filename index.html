@@ -173,10 +173,35 @@ function load(){
  navigator();
 }
 
-// ANSWER (change allowed)
+// ANSWER + AUTO JUMP TO NEXT UNANSWERED
 function answer(a){
- answers[i]=a;
- load();
+  answers[i] = a;
+
+  let next = -1;
+
+  // সামনে unanswered খোঁজা
+  for(let j = i + 1; j < questions.length; j++){
+    if(answers[j] === null){
+      next = j;
+      break;
+    }
+  }
+
+  // সামনে না পেলে পেছনে খোঁজা
+  if(next === -1){
+    for(let j = 0; j < i; j++){
+      if(answers[j] === null){
+        next = j;
+        break;
+      }
+    }
+  }
+
+  if(next !== -1){
+    i = next;
+  }
+
+  load();
 }
 
 // NAV (answered question = blue)
