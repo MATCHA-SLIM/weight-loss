@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>বাংলা Typing Practice</title>
+<title>BanglaType Pro – বাংলা টাইপিং প্র্যাকটিস</title>
 <style>
 :root{
   --bg:#1e1e1e;
@@ -13,182 +13,54 @@
   --correct:#22c55e;
   --wrong:#ef4444;
 }
-.light{
-  --bg:#f4f4f4;
-  --panel:#ffffff;
-  --text:#333;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:var(--bg);
-  color:var(--text);
-}
-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:15px 25px;
-}
-header h1{font-size:22px;color:var(--accent)}
-header button{background:none;border:none;color:var(--text);font-size:18px;cursor:pointer}
-
-#modes{display:flex;justify-content:center;gap:15px;margin:10px 0}
+body{margin:0;font-family:Arial, sans-serif;background:var(--bg);color:var(--text);}
+header{padding:15px 25px;font-size:22px;color:var(--accent);}
+#container{max-width:900px;margin:20px auto;padding:20px}
+#textBox{background:var(--panel);padding:30px;border-radius:12px;font-size:28px;line-height:1.7;user-select:none;min-height:140px}
+.char{opacity:.4}
+.char.correct{color:var(--correct);opacity:1}
+.char.wrong{color:var(--wrong);opacity:1}
+.char.active{border-left:3px solid var(--accent);animation:blink 1s infinite;opacity:1}
+@keyframes blink{0%,50%{border-color:var(--accent)}51%,100%{border-color:transparent}}
+#input{position:absolute;opacity:0}
+#stats{display:flex;gap:30px;margin-top:20px;font-size:18px}
+#modes{display:flex;gap:15px;margin-bottom:15px}
 #modes button{background:var(--panel);border:none;color:var(--text);padding:6px 14px;border-radius:20px;cursor:pointer}
 #modes button.active{color:var(--accent)}
-
-#container{max-width:900px;margin:20px auto;padding:20px}
-#textBox{
-  background:var(--panel);
-  padding:25px;
-  border-radius:12px;
-  font-size:26px;
-  line-height:1.6;
-  user-select:none;
-}
-.word.correct{color:var(--correct)}
-.word.wrong{color:var(--wrong)}
-.word.active{border-left:2px solid var(--accent)}
-
-#input{
-  width:100%;
-  margin-top:20px;
-  background:transparent;
-  border:none;
-  outline:none;
-  color: var(--text);   /* ← transparent বাদ */
-}
-
-#stats{display:flex;justify-content:center;gap:30px;margin-top:20px;font-size:18px}
-
-#keyboard{margin-top:30px;text-align:center}
-.key{display:inline-block;background:var(--panel);padding:8px 10px;margin:3px;border-radius:5px;font-size:14px}
-
-#result{display:none;text-align:center;margin-top:30px}
-
+#result{text-align:center;margin-top:30px;font-size:20px}
 </style>
 </head>
 <body>
-<header>
-  <h1>BanglaType</h1>
-  <button onclick="toggleTheme()">🌙/☀️</button>
-</header>
-
-<div id="modes">
-  <button onclick="setWords(25)">25</button>
-  <button onclick="setWords(50)">50</button>
-  <button onclick="setWords(100)" class="active">100</button>
-</div>
-
+<header>BanglaType Pro</header>
 <div id="container">
+  <div id="modes">
+    <button onclick="setCount(25)">25</button>
+    <button onclick="setCount(50)">50</button>
+    <button onclick="setCount(100)" class="active">100</button>
+  </div>
   <div id="textBox"></div>
   <input id="input" autofocus>
-
   <div id="stats">
     <div>WPM: <span id="wpm">0</span></div>
     <div>Accuracy: <span id="acc">0%</span></div>
     <div>Time: <span id="time">0</span>s</div>
   </div>
-
-  <div id="keyboard"></div>
-
   <div id="result"></div>
 </div>
-
 <script>
-// WORD DATABASE (sample, expandable to 10k+)
-const wordsDB=["বাংলা","ভাষা","আমাদের","গর্ব","দেশ","মানুষ","শিক্ষা","ইতিহাস","সংস্কৃতি","স্বাধীনতা","চর্চা","প্রযুক্তি","ভবিষ্যৎ","শক্তি","জ্ঞান","সম্মান","সমাজ","উন্নয়ন","অধিকার","চেষ্টা","সময়","জীবন","আলো","স্বপ্ন","বিশ্বাস","সাফল্য","পরিশ্রম","মন","শান্তি","সুখ"];
-
-let totalWords=100;
-let words=[];
-let current=0;
-let startTime=null;
-let correctCount=0;
-
-const textBox=document.getElementById('textBox');
+const wordsDB=["বাংলা","ভাষা","আমাদের","গর্ব","দেশ","মানুষ","শিক্ষা","ইতিহাস","সংস্কৃতি","স্বাধীনতা","চর্চা","প্রযুক্তি","ভবিষ্যৎ","শক্তি","জ্ঞান","সম্মান","সমাজ","উন্নয়ন","অধিকার","চেষ্টা","সময়","জীবন","আলো","স্বপ্ন","বিশ্বাস","সাফল্য","পরিশ্রম","মন","শান্তি","সুখ","বাংলাদেশ","মুক্তিযুদ্ধ","রাষ্ট্র","সংবিধান","অর্থনীতি","পরিবেশ","প্রকৃতি","নদী","গ্রাম","শহর","সভ্যতা"];
+let total=100,chars=[],index=0,start=null,correct=0;
+const box=document.getElementById('textBox');
 const input=document.getElementById('input');
-
-function generateWords(){
-  words=[];current=0;correctCount=0;
-  for(let i=0;i<totalWords;i++){
-    words.push(wordsDB[Math.floor(Math.random()*wordsDB.length)]);
-  }
-  render();
-}
-
-function render(){
-  textBox.innerHTML='';
-  words.forEach((w,i)=>{
-    const span=document.createElement('span');
-    span.innerText=w+' ';
-    span.className='word'+(i===0?' active':'');
-    textBox.appendChild(span);
-  });
-  input.value='';
-  startTime=null;
-}
-
-generateWords();
-
-input.addEventListener('input',()=>{
-  if(!startTime) startTime=Date.now();
-  const typed=input.value.trim();
-  const currentWord=words[current];
-  const spans=document.querySelectorAll('.word');
-
-  if(typed.endsWith(' ')){
-    if(typed.slice(0,-1)===currentWord){
-      spans[current].classList.add('correct');
-      correctCount++;
-    }else{
-      spans[current].classList.add('wrong');
-    }
-    spans[current].classList.remove('active');
-    current++;
-    if(spans[current]) spans[current].classList.add('active');
-    input.value='';
-
-    if(current===words.length){finish();}
-  }
-  updateStats();
-});
-
-function updateStats(){
-  if(!startTime) return;
-  const elapsed=(Date.now()-startTime)/1000;
-  document.getElementById('time').innerText=Math.floor(elapsed);
-  const wpm=Math.round((correctCount/elapsed)*60);
-  document.getElementById('wpm').innerText=wpm||0;
-  document.getElementById('acc').innerText=Math.round((correctCount/current||0)*100)+'%';
-}
-
-function finish(){
-  const elapsed=(Date.now()-startTime)/1000;
-  document.getElementById('result').style.display='block';
-  document.getElementById('result').innerHTML=`<h2>Result</h2>
-  <p>WPM: ${Math.round((correctCount/elapsed)*60)}</p>
-  <p>Accuracy: ${Math.round((correctCount/words.length)*100)}%</p>`;
-}
-
-function setWords(n){
-  totalWords=n;
-  document.querySelectorAll('#modes button').forEach(b=>b.classList.remove('active'));
-  event.target.classList.add('active');
-  generateWords();
-}
-
-function toggleTheme(){
-  document.body.classList.toggle('light');
-}
-
-// ON-SCREEN KEYBOARD
-const keys='অ আ ই ঈ উ ঊ এ ঐ ও ঔ ক খ গ ঘ চ ছ জ ঝ ট ঠ ড ঢ ত থ দ ধ ন প ফ ব ভ ম য র ল শ ষ স হ ড় ঢ় য়'.split(' ');
-const kb=document.getElementById('keyboard');
-keys.forEach(k=>{
-  const d=document.createElement('div');
-  d.className='key';d.innerText=k;kb.appendChild(d);
-});
+function generate(){box.innerHTML='';chars=[];index=0;correct=0;start=null;let text='';for(let i=0;i<total;i++){text+=wordsDB[Math.floor(Math.random()*wordsDB.length)]+' ';}
+text.split('').forEach((c,i)=>{const s=document.createElement('span');s.innerText=c;s.className='char'+(i===0?' active':'');box.appendChild(s);chars.push(s);});
+document.getElementById('result').innerHTML='';}
+function setCount(n){total=n;document.querySelectorAll('#modes button').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');generate();}
+input.addEventListener('input',()=>{if(!start)start=Date.now();const val=input.value;if(index>=chars.length)return;const typed=val[val.length-1];if(typed===chars[index].innerText){chars[index].classList.add('correct');correct++;}else{chars[index].classList.add('wrong');}
+chars[index].classList.remove('active');index++;if(chars[index])chars[index].classList.add('active');update();if(index===chars.length)finish();});
+function update(){const t=(Date.now()-start)/1000;document.getElementById('time').innerText=Math.floor(t);document.getElementById('wpm').innerText=Math.round((correct/5)/(t/60))||0;document.getElementById('acc').innerText=Math.round((correct/index)*100)||0+'%';}
+function finish(){document.getElementById('result').innerHTML=`<h2>Result</h2><p>WPM: ${document.getElementById('wpm').innerText}</p><p>Accuracy: ${document.getElementById('acc').innerText}</p>`;}
+generate();
 </script>
 </body>
 </html>
