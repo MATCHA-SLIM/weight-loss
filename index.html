@@ -56,7 +56,41 @@ function generate(){box.innerHTML='';chars=[];index=0;correct=0;start=null;let t
 text.split('').forEach((c,i)=>{const s=document.createElement('span');s.innerText=c;s.className='char'+(i===0?' active':'');box.appendChild(s);chars.push(s);});
 document.getElementById('result').innerHTML='';}
 function setCount(n){total=n;document.querySelectorAll('#modes button').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');generate();}
-input.addEventListener('input',()=>{if(!start)start=Date.now();const val=input.value;if(index>=chars.length)return;const typed=val[val.length-1];if(typed===chars[index].innerText){chars[index].classList.add('correct');correct++;}else{chars[index].classList.add('wrong');}
+input.addEventListener('keydown',(e)=>{
+  if(!start) start=Date.now();
+
+  // BACKSPACE handling
+  if(e.key === 'Backspace'){
+    if(index > 0){
+      index--;
+      chars[index].classList.remove('correct','wrong');
+      chars.forEach(c=>c.classList.remove('active'));
+      chars[index].classList.add('active');
+    }
+    e.preventDefault();
+    update();
+    return;
+  }
+
+  // ignore non-character keys
+  if(e.key.length !== 1) return;
+
+  if(index >= chars.length) return;
+
+  if(e.key === chars[index].innerText){
+    chars[index].classList.add('correct');
+    correct++;
+  } else {
+    chars[index].classList.add('wrong');
+  }
+
+  chars[index].classList.remove('active');
+  index++;
+  if(chars[index]) chars[index].classList.add('active');
+
+  update();
+  if(index === chars.length) finish();
+});const val=input.value;if(index>=chars.length)return;const typed=val[val.length-1];if(typed===chars[index].innerText){chars[index].classList.add('correct');correct++;}else{chars[index].classList.add('wrong');}
 chars[index].classList.remove('active');index++;if(chars[index])chars[index].classList.add('active');update();if(index===chars.length)finish();});
 function update(){const t=(Date.now()-start)/1000;document.getElementById('time').innerText=Math.floor(t);document.getElementById('wpm').innerText=Math.round((correct/5)/(t/60))||0;document.getElementById('acc').innerText=Math.round((correct/index)*100)||0+'%';}
 function finish(){document.getElementById('result').innerHTML=`<h2>Result</h2><p>WPM: ${document.getElementById('wpm').innerText}</p><p>Accuracy: ${document.getElementById('acc').innerText}</p>`;}
