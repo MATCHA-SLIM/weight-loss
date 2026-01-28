@@ -1,286 +1,180 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bangla Typing | Monkeytype Style</title>
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bangla Monkeytype</title>
 <style>
 :root{
- --bg:#1e1e1e;
- --card:#2a2a2a;
- --text:#eaeaea;
- --accent:#4caf50;
- --wrong:#e74c3c;
-}
-.light{
- --bg:#f3f3f3;
- --card:#ffffff;
- --text:#111;
- --accent:#2e7d32;
- --wrong:#c0392b;
+  --bg:#2b2e31;
+  --text:#a6a6a6;
+  --active:#f5c542;
+  --correct:#8fd694;
+  --wrong:#ff6b6b;
+  --card:#1f2225;
 }
 body{
- margin:0;
- font-family: Kalpurush, Arial, sans-serif;
- background:var(--bg);
- color:var(--text);
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family: "Segoe UI", sans-serif;
 }
-.container{
- max-width:900px;
- margin:20px auto;
- padding:20px;
+header{
+  padding:15px 30px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
-.header{
- display:flex;
- justify-content:space-between;
- align-items:center;
+header h1{color:var(--active); font-size:24px; margin:0}
+.controls{
+  display:flex;
+  gap:15px;
+  justify-content:center;
+  margin:20px 0;
 }
-button{
- background:var(--card);
- color:var(--text);
- border:1px solid #555;
- padding:8px 14px;
- border-radius:6px;
- cursor:pointer;
+.controls button{
+  background:none;
+  border:none;
+  color:var(--text);
+  cursor:pointer;
+  font-size:15px;
 }
-button.active{
- background:var(--accent);
- color:#fff;
+.controls button.active{color:var(--active)}
+#typingBox{
+  max-width:900px;
+  margin:40px auto;
+  font-size:28px;
+  line-height:1.6;
 }
-.modes button{margin:5px}
-.text{
- background:var(--card);
- padding:20px;
- border-radius:8px;
- font-size:22px;
- line-height:1.7;
- min-height:120px;
+.word{margin-right:8px}
+.correct{color:var(--correct)}
+.wrong{color:var(--wrong)}
+.activeWord{border-left:3px solid var(--active); padding-left:5px}
+#hiddenInput{
+  position:absolute;
+  opacity:0;
 }
-.correct{color:var(--accent)}
-.wrong{color:var(--wrong);text-decoration:underline}
-input{
- width:100%;
- margin-top:20px;
- padding:14px;
- font-size:20px;
- background:transparent;
- border:none;
- border-bottom:2px solid var(--accent);
- color:var(--text);
- outline:none;
+#stats{
+  text-align:center;
+  margin-top:30px;
 }
-.stats{
- display:flex;
- justify-content:space-between;
- margin-top:15px;
- font-size:16px;
-}
-.keyboard{
- display:grid;
- grid-template-columns:repeat(10,1fr);
- gap:6px;
- margin-top:20px;
+#keyboard{
+  max-width:700px;
+  margin:30px auto;
+  display:grid;
+  grid-template-columns:repeat(10,1fr);
+  gap:6px;
 }
 .key{
- background:var(--card);
- padding:10px;
- text-align:center;
- border-radius:5px;
- cursor:pointer;
-}
-.footer{
- margin-top:30px;
- text-align:center;
- opacity:.6;
+  background:var(--card);
+  padding:10px 0;
+  text-align:center;
+  border-radius:5px;
+  cursor:pointer;
 }
 </style>
 </head>
-
 <body>
-<div class="container">
+<header>
+  <h1>বাংলা Monkeytype</h1>
+  <div id="profile"></div>
+</header>
 
-<div class="header">
- <h2>⌨️ বাংলা Typing</h2>
- <div>
-  <button onclick="toggleTheme()">🌙 / ☀️</button>
-  <button onclick="showHistory()">📊</button>
- </div>
+<div class="controls">
+  <button class="active" onclick="setCount(25)">25</button>
+  <button onclick="setCount(50)">50</button>
+  <button onclick="setCount(100)">100</button>
 </div>
 
-<div id="profile"></div>
+<div id="typingBox"></div>
+<input id="hiddenInput" autofocus />
 
-<div class="modes">
- <button class="active" onclick="setMode('time',60)">60s</button>
- <button onclick="setMode('time',30)">30s</button>
- <button onclick="setMode('time',120)">120s</button>
- <button onclick="setMode('practice',0)">Practice</button>
-</div>
+<div id="stats">WPM: <span id="wpm">0</span> | Accuracy: <span id="acc">0</span>%</div>
 
-<div class="text" id="text"></div>
-<input id="input" placeholder="এখানে টাইপ শুরু করো..." oninput="typeCheck()">
-
-<div class="stats">
- <div>⏱ <span id="time">60</span></div>
- <div>⚡ WPM: <span id="wpm">0</span></div>
- <div>🎯 ACC: <span id="acc">0%</span></div>
-</div>
-
-<div class="keyboard" id="keyboard"></div>
-
-<div class="footer">
- Monkeytype-style Bangla Typing Practice
-</div>
-
-</div>
+<div id="keyboard"></div>
 
 <script>
-// ====== WORD DATABASE (Expandable) ======
-const banglaWords=[
-"বাংলা","ভাষা","মানুষ","দেশ","শিক্ষা","সমাজ","সময়","জীবন","প্রযুক্তি","ইতিহাস",
-"স্বাধীনতা","সংগ্রাম","উন্নয়ন","শক্তি","চিন্তা","মন","বিশ্বাস","পরিশ্রম","সাফল্য","ভবিষ্যৎ",
-"বিদ্যালয়","পরীক্ষা","শিক্ষার্থী","শিক্ষক","অধ্যয়ন","অনুশীলন","লক্ষ্য","চেষ্টা","ধৈর্য","সাহস"
-];
+// ---- WORD DATABASE (sample, replace with 10k JSON later) ----
+const words=["বাংলা","ভাষা","মানুষ","শিক্ষা","দেশ","সমাজ","পরিশ্রম","উন্নতি","স্বপ্ন","সময়","জীবন","প্রযুক্তি","পরিবর্তন","ভবিষ্যৎ","ইতিহাস","সংগ্রাম","স্বাধীনতা","মর্যাদা","বিশ্বাস","সাফল্য"];
 
-// ====== RANDOM TEXT ======
-function generateText(count=50){
- let arr=[];
- for(let i=0;i<count;i++){
-  arr.push(banglaWords[Math.floor(Math.random()*banglaWords.length)]);
- }
- return arr.join(" ");
+let wordCount=25;
+let wordIndex=0;
+let startTime=null;
+let correctChars=0;
+let totalChars=0;
+
+const box=document.getElementById("typingBox");
+const input=document.getElementById("hiddenInput");
+
+function setCount(c){
+  wordCount=c;
+  document.querySelectorAll('.controls button').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  reset();
 }
 
-// ====== STATE ======
-let mode="time",limit=60,time=60,start=false;
-let current="",correct=0,timerInt;
-
-// ====== SET TEXT ======
-function setText(){
- current=generateText(50);
- document.getElementById("text").innerHTML=
- current.split("").map(c=>`<span>${c}</span>`).join("");
-}
-setText();
-
-// ====== MODE ======
-function setMode(m,l){
- mode=m;limit=l;time=l;
- document.querySelectorAll(".modes button").forEach(b=>b.classList.remove("active"));
- event.target.classList.add("active");
- reset();
-}
-
-// ====== RESET ======
-function reset(){
- clearInterval(timerInt);
- start=false;correct=0;
- document.getElementById("input").value="";
- document.getElementById("time").innerText=time;
- document.getElementById("wpm").innerText=0;
- document.getElementById("acc").innerText="0%";
- setText();
-}
-
-// ====== TYPING ======
-function typeCheck(){
- if(!start){
-  start=true;
-  if(mode==="time") startTimer();
- }
- let input=inputBox.value;
- let spans=document.querySelectorAll("#text span");
- correct=0;
-
- spans.forEach((s,i)=>{
-  s.className="";
-  if(input[i]==null) return;
-  if(input[i]===current[i]){
-   s.classList.add("correct");correct++;
-  }else s.classList.add("wrong");
- });
-
- if(input.length>=current.length-1){
-  setText();
-  inputBox.value="";
- }
-
- let words=input.trim().split(/\s+/).length;
- let used=Math.max(1,limit-time);
- let wpm=Math.round((words/used)*60);
- document.getElementById("wpm").innerText=wpm;
- document.getElementById("acc").innerText=Math.round((correct/current.length)*100)+"%";
-}
-
-// ====== TIMER ======
-function startTimer(){
- timerInt=setInterval(()=>{
-  time--;
-  document.getElementById("time").innerText=time;
-  if(time<=0){
-   clearInterval(timerInt);
-   finish();
+function generate(){
+  box.innerHTML="";
+  const selected=[];
+  for(let i=0;i<wordCount;i++){
+    selected.push(words[Math.floor(Math.random()*words.length)]);
   }
- },1000);
+  selected.forEach((w,i)=>{
+    const span=document.createElement('span');
+    span.innerText=w;
+    span.className='word'+(i===0?' activeWord':'');
+    box.appendChild(span);
+  });
 }
 
-// ====== FINISH ======
-function finish(){
- inputBox.disabled=true;
- saveResult();
- saveProfile();
-}
-
-// ====== THEME ======
-function toggleTheme(){
- document.body.classList.toggle("light");
-}
-
-// ====== KEYBOARD ======
-const keys=["ক","খ","গ","ঘ","ঙ","চ","ছ","জ","ঝ","ঞ","া","ি","ী","ু","ূ","ে","ৈ","ো","ৌ"," "];
-const kb=document.getElementById("keyboard");
-const inputBox=document.getElementById("input");
-keys.forEach(k=>{
- let d=document.createElement("div");
- d.className="key";
- d.innerText=k===" "?"␣":k;
- d.onclick=()=>{inputBox.value+=k;typeCheck();}
- kb.appendChild(d);
+input.addEventListener('input',()=>{
+  if(!startTime) startTime=Date.now();
+  const currentWord=box.children[wordIndex];
+  const value=input.value.trim();
+  if(value.endsWith(' ')){
+    totalChars+=currentWord.innerText.length;
+    if(value.trim()===currentWord.innerText){
+      currentWord.classList.add('correct');
+      correctChars+=currentWord.innerText.length;
+    }else{
+      currentWord.classList.add('wrong');
+    }
+    currentWord.classList.remove('activeWord');
+    wordIndex++;
+    if(box.children[wordIndex]) box.children[wordIndex].classList.add('activeWord');
+    input.value='';
+    updateStats();
+  }
 });
 
-// ====== HISTORY ======
-function saveResult(){
- let h=JSON.parse(localStorage.getItem("history")||"[]");
- h.push({
-  date:new Date().toLocaleString(),
-  wpm:document.getElementById("wpm").innerText,
-  acc:document.getElementById("acc").innerText
- });
- localStorage.setItem("history",JSON.stringify(h));
-}
-function showHistory(){
- let h=JSON.parse(localStorage.getItem("history")||"[]");
- alert(h.map(x=>`${x.date} | ${x.wpm} WPM | ${x.acc}`).join("\n"));
+function updateStats(){
+  const mins=(Date.now()-startTime)/60000;
+  const wpm=Math.round((correctChars/5)/mins)||0;
+  const acc=Math.round((correctChars/totalChars)*100)||0;
+  document.getElementById('wpm').innerText=wpm;
+  document.getElementById('acc').innerText=acc;
 }
 
-// ====== PROFILE ======
-function saveProfile(){
- let p=JSON.parse(localStorage.getItem("profile")||"{}");
- if(!p.name) p.name=prompt("তোমার নাম লিখো:");
- p.best=Math.max(p.best||0,document.getElementById("wpm").innerText);
- p.tests=(p.tests||0)+1;
- localStorage.setItem("profile",JSON.stringify(p));
- loadProfile();
+function reset(){
+  wordIndex=0; startTime=null; correctChars=0; totalChars=0;
+  input.value='';
+  document.getElementById('wpm').innerText=0;
+  document.getElementById('acc').innerText=0;
+  generate();
 }
-function loadProfile(){
- let p=JSON.parse(localStorage.getItem("profile")||"{}");
- if(p.name){
-  document.getElementById("profile").innerText=
-  `👤 ${p.name} | Best: ${p.best} WPM | Tests: ${p.tests}`;
- }
-}
-loadProfile();
+
+// ---- On-screen keyboard ----
+const keys=["ক","খ","গ","ঘ","ঙ","চ","ছ","জ","ঝ","ঞ","া","ি","ী","ু","ূ","ে","ৈ","ো","ৌ"," "];
+const kb=document.getElementById('keyboard');
+keys.forEach(k=>{
+  const d=document.createElement('div');
+  d.className='key';
+  d.innerText=k===' ' ? 'Space':k;
+  d.onclick=()=>input.value+=k;
+  kb.appendChild(d);
+});
+
+reset();
 </script>
-
 </body>
 </html>
