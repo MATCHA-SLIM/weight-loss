@@ -3,116 +3,186 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>বাংলা টাইপিং প্র্যাকটিস</title>
+<title>Bangla Typing | Monkeytype Style</title>
 
 <style>
+:root{
+  --bg:#1e1e1e;
+  --card:#2a2a2a;
+  --text:#eaeaea;
+  --accent:#4caf50;
+}
+.light{
+  --bg:#f2f2f2;
+  --card:#ffffff;
+  --text:#111;
+  --accent:#2e7d32;
+}
 body{
-    font-family: Kalpurush, Arial, sans-serif;
-    background:#eef2f5;
-    margin:0;
+  margin:0;
+  font-family: Kalpurush, Arial, sans-serif;
+  background:var(--bg);
+  color:var(--text);
 }
 .container{
-    max-width:700px;
-    margin:20px auto;
-    background:#fff;
-    padding:20px;
-    border-radius:10px;
-    box-shadow:0 4px 10px rgba(0,0,0,.1);
+  max-width:800px;
+  margin:30px auto;
+  padding:20px;
 }
-h1{text-align:center}
-.sample{
-    background:#f1f1f1;
-    padding:15px;
-    border-radius:6px;
-    font-size:18px;
-}
-textarea{
-    width:100%;
-    height:120px;
-    font-size:18px;
-    margin-top:10px;
-    padding:10px;
-}
-.top{
-    display:flex;
-    justify-content:space-between;
-    margin:10px 0;
-    font-weight:bold;
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 button{
-    padding:10px 20px;
-    font-size:16px;
-    cursor:pointer;
+  background:var(--card);
+  color:var(--text);
+  border:1px solid #555;
+  padding:8px 14px;
+  cursor:pointer;
+  border-radius:6px;
 }
-.result p{
-    font-size:18px;
+button.active{
+  background:var(--accent);
+  color:#fff;
 }
-.correct{color:green}
-.wrong{color:red}
+.modes button{margin-right:5px}
+.text{
+  background:var(--card);
+  padding:20px;
+  margin-top:20px;
+  font-size:20px;
+  line-height:1.6;
+  border-radius:8px;
+}
+.correct{color:var(--accent)}
+.wrong{color:#e74c3c;text-decoration:underline}
+input{
+  width:100%;
+  margin-top:20px;
+  padding:15px;
+  font-size:20px;
+  background:transparent;
+  border:none;
+  border-bottom:2px solid var(--accent);
+  color:var(--text);
+  outline:none;
+}
+.stats{
+  display:flex;
+  justify-content:space-between;
+  margin-top:15px;
+}
+.footer{
+  text-align:center;
+  margin-top:30px;
+  opacity:.6;
+}
 </style>
 </head>
 
 <body>
-
 <div class="container">
-<h1>⌨️ বাংলা টাইপিং প্র্যাকটিস</h1>
+  <div class="header">
+    <h2>⌨️ বাংলা Typing</h2>
+    <button onclick="toggleTheme()">🌙 / ☀️</button>
+  </div>
 
-<div class="top">
-<div id="timer">সময়: 60s</div>
-<div id="wpm">WPM: 0</div>
-</div>
+  <div class="modes">
+    <button class="active" onclick="setMode('time',60)">60s</button>
+    <button onclick="setMode('time',30)">30s</button>
+    <button onclick="setMode('time',120)">120s</button>
+    <button onclick="setMode('words',25)">25 words</button>
+    <button onclick="setMode('practice',0)">Practice</button>
+  </div>
 
-<div class="sample" id="text">
-বাংলা ভাষা আমাদের মনের ভাব প্রকাশের প্রধান মাধ্যম। নিয়মিত টাইপিং অনুশীলনের মাধ্যমে গতি ও নির্ভুলতা বৃদ্ধি করা যায়।
-</div>
+  <div class="text" id="text"></div>
+  <input id="input" placeholder="এখানে টাইপ শুরু করো..." oninput="typeCheck()" disabled>
 
-<textarea id="input" placeholder="উপরের লেখাটি এখানে টাইপ করো..." oninput="check()"></textarea>
+  <div class="stats">
+    <div>⏱ <span id="time">60</span></div>
+    <div>⚡ WPM: <span id="wpm">0</span></div>
+    <div>🎯 ACC: <span id="acc">0%</span></div>
+  </div>
 
-<br><br>
-<button onclick="start()">▶ শুরু করো</button>
-
-<div class="result">
-<p id="accuracy"></p>
-</div>
+  <div class="footer">
+    Monkeytype-style Bangla Typing Practice
+  </div>
 </div>
 
 <script>
-let time = 60;
-let started = false;
-let timer;
+const texts=[
+"বাংলা ভাষা আমাদের মনের ভাব প্রকাশের প্রধান মাধ্যম।",
+"নিয়মিত অনুশীলনের মাধ্যমে টাইপিং দক্ষতা বৃদ্ধি করা যায়।",
+"শিক্ষা একটি জাতির মেরুদণ্ড।",
+"প্রযুক্তির সঠিক ব্যবহার আমাদের জীবনকে সহজ করে।",
+"সময় ও ধৈর্য সাফল্যের চাবিকাঠি।"
+];
 
-function start(){
- if(started) return;
- started = true;
+let mode="time",limit=60,time=60,start=false;
+let current="",index=0,correct=0;
+
+function setText(){
+ current=texts[Math.floor(Math.random()*texts.length)];
+ document.getElementById("text").innerHTML=current.split("").map(c=>`<span>${c}</span>`).join("");
+}
+setText();
+
+function setMode(m,l){
+ mode=m;limit=l;time=l;
+ document.querySelectorAll(".modes button").forEach(b=>b.classList.remove("active"));
+ event.target.classList.add("active");
+ reset();
+}
+
+function reset(){
+ start=false;index=0;correct=0;
  document.getElementById("input").value="";
- time = 60;
- timer = setInterval(()=>{
+ document.getElementById("input").disabled=false;
+ document.getElementById("time").innerText=time;
+ document.getElementById("wpm").innerText=0;
+ document.getElementById("acc").innerText="0%";
+ setText();
+}
+
+function toggleTheme(){
+ document.body.classList.toggle("light");
+}
+
+function typeCheck(){
+ if(!start){
+   start=true;
+   if(mode==="time") timer();
+ }
+ let input=document.getElementById("input").value;
+ let spans=document.querySelectorAll("#text span");
+ correct=0;
+ spans.forEach((s,i)=>{
+   s.className="";
+   if(input[i]==null) return;
+   if(input[i]===current[i]){
+     s.classList.add("correct");
+     correct++;
+   }else{
+     s.classList.add("wrong");
+   }
+ });
+ let words=input.trim().split(/\s+/).length;
+ let wpm=Math.round((words/((limit-time)||1))*60);
+ document.getElementById("wpm").innerText=wpm;
+ document.getElementById("acc").innerText=Math.round((correct/current.length)*100)+"%";
+}
+
+function timer(){
+ let t=setInterval(()=>{
    time--;
-   document.getElementById("timer").innerText="সময়: "+time+"s";
+   document.getElementById("time").innerText=time;
    if(time<=0){
-     clearInterval(timer);
+     clearInterval(t);
      document.getElementById("input").disabled=true;
    }
  },1000);
 }
-
-function check(){
- let text = document.getElementById("text").innerText;
- let input = document.getElementById("input").value;
-
- let correct = 0;
- for(let i=0;i<input.length;i++){
-   if(input[i] === text[i]) correct++;
- }
-
- let accuracy = ((correct / text.length) * 100).toFixed(2);
- document.getElementById("accuracy").innerText="Accuracy: "+accuracy+"%";
-
- let words = input.trim().split(/\s+/).length;
- let wpm = Math.round((words / (60-time)) * 60 || 0);
- document.getElementById("wpm").innerText="WPM: "+wpm;
-}
 </script>
-
 </body>
 </html>
