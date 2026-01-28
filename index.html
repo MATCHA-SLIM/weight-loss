@@ -3,279 +3,115 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ভিয়েতনাম MCQ | Board Exam</title>
+<title>বাংলা টাইপিং প্র্যাকটিস</title>
 
 <style>
 body{
-    font-family: Arial, sans-serif;
-    background:#eef1f4;
+    font-family: Kalpurush, Arial, sans-serif;
+    background:#eef2f5;
     margin:0;
 }
 .container{
-    max-width:650px;
+    max-width:700px;
     margin:20px auto;
     background:#fff;
     padding:20px;
-    border-radius:8px;
-    box-shadow:0 3px 8px rgba(0,0,0,.1);
+    border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,.1);
 }
-h1,h2{text-align:center}
-input,button{
+h1{text-align:center}
+.sample{
+    background:#f1f1f1;
+    padding:15px;
+    border-radius:6px;
+    font-size:18px;
+}
+textarea{
+    width:100%;
+    height:120px;
+    font-size:18px;
+    margin-top:10px;
     padding:10px;
-    margin:5px 0;
 }
-button{cursor:pointer}
-.hidden{display:none}
 .top{
     display:flex;
     justify-content:space-between;
+    margin:10px 0;
     font-weight:bold;
 }
-.question{font-size:18px;margin:15px 0}
-.options button{
-    width:100%;
-    text-align:left;
-    border:1px solid #bbb;
-    background:#f9f9f9;
+button{
+    padding:10px 20px;
+    font-size:16px;
+    cursor:pointer;
 }
-.options button.selected{
-    background:#dbeafe;
-    border-color:#2563eb;
+.result p{
+    font-size:18px;
 }
-.correct{background:#c8f7c5!important}
-.wrong{background:#f7c5c5!important}
-.nav button{
-    margin:2px;
-    width:35px;
-}
-.progress{
-    height:8px;
-    background:#ddd;
-    margin:10px 0;
-}
-.progress div{
-    height:100%;
-    background:#3498db;
-    width:0%;
-}
-@media(max-width:500px){
-    .container{margin:10px}
-}
-    .review-item{
-  border:1px solid #ddd;
-  padding:10px;
-  margin:10px 0;
-  border-radius:6px;
-}
-.review-item.correct{
-  background:#e6fffa;
-}
-.review-item.wrong{
-  background:#ffe6e6;
-}
-.review-item p{
-  margin:5px 0;
-}
-    .nav button.answered{
-    background:#2563eb;
-    color:#fff;
-    border-color:#2563eb;
-}
+.correct{color:green}
+.wrong{color:red}
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
-<div class="container" id="loginBox">
-<h1>পরীক্ষার্থী লগইন</h1>
-<input id="name" placeholder="তোমার নাম লেখো">
-<button onclick="startExam()">Start Exam</button>
-</div>
+<div class="container">
+<h1>⌨️ বাংলা টাইপিং প্র্যাকটিস</h1>
 
-<!-- QUIZ -->
-<div class="container hidden" id="quizBox">
 <div class="top">
-<div id="qno"></div>
-<div id="timer"></div>
+<div id="timer">সময়: 60s</div>
+<div id="wpm">WPM: 0</div>
 </div>
 
-<div class="progress"><div id="bar"></div></div>
-
-<div class="question"></div>
-<div class="options"></div>
-
-<div class="nav" id="nav"></div>
-
-<button onclick="finish()">Submit</button>
+<div class="sample" id="text">
+বাংলা ভাষা আমাদের মনের ভাব প্রকাশের প্রধান মাধ্যম। নিয়মিত টাইপিং অনুশীলনের মাধ্যমে গতি ও নির্ভুলতা বৃদ্ধি করা যায়।
 </div>
 
-<!-- RESULT -->
-<div class="container hidden" id="resultBox">
-<h2>📊 পরীক্ষার ফলাফল</h2>
-<p id="student"></p>
-<p id="correct"></p>
-<p id="wrong"></p>
-<p id="score"></p>
+<textarea id="input" placeholder="উপরের লেখাটি এখানে টাইপ করো..." oninput="check()"></textarea>
+
+<br><br>
+<button onclick="start()">▶ শুরু করো</button>
+
+<div class="result">
 <p id="accuracy"></p>
-<button onclick="restart()">🔄 আবার শুরু করো</button>
 </div>
-<!-- REVIEW -->
-<div class="container hidden" id="reviewBox">
-<h2>📝 Answer Review</h2>
-<div id="reviewList"></div>
-<button onclick="restart()">🔄 আবার শুরু করো</button>
 </div>
 
 <script>
-const questions=[
-{q:"ভিয়েতনাম কোন অঞ্চলে অবস্থিত?",o:["দক্ষিণ এশিয়া","পূর্ব এশিয়া","দক্ষিণ–পূর্ব এশিয়া","মধ্য এশিয়া"],a:2},
-{q:"প্রাচীনকালে ভিয়েতনাম কোন দেশের প্রভাবাধীন ছিল?",o:["জাপান","কোরিয়া","চীন","থাইল্যান্ড"],a:2},
-{q:"ভিয়েতনাম কোন দেশের উপনিবেশ ছিল?",o:["ব্রিটেন","ফ্রান্স","নেদারল্যান্ডস","পর্তুগাল"],a:1},
-{q:"স্বাধীনতা আন্দোলনের নেতা কে?",o:["লি ডাক থো","ভো জিয়াপ","হো চি মিন","নুগুয়েন"],a:2},
-{q:"হো চি মিন কবে স্বাধীনতা ঘোষণা করেন?",o:["১৯৩৯","১৯৪৫","১৯৫৪","১৯৭৫"],a:1},
-{q:"কোন চুক্তিতে ভিয়েতনাম বিভক্ত হয়?",o:["প্যারিস","ভার্সাই","জেনেভা","সাইগন"],a:2},
-{q:"উত্তর ভিয়েতনামের রাজধানী?",o:["সাইগন","হুয়ে","দা নাং","হ্যানয়"],a:3},
-{q:"ভিয়েতনাম যুদ্ধ শেষ হয় কবে?",o:["১৯৬৮","১৯৭০","১৯৭৩","১৯৭৫"],a:3},
-{q:"দক্ষিণ ভিয়েতনামকে সমর্থন করেছিল?",o:["চীন","সোভিয়েত","যুক্তরাষ্ট্র","কিউবা"],a:2},
-{q:"Tiger of Bicycle বলা হয় কেন?",o:["প্রযুক্তি","নৌবাহিনী","সাইকেল ও সাহস","বিমান"],a:2},
-{q:"শান্তি আলোচনায় ভূমিকা রাখেন?",o:["হো চি মিন","লি ডাক থো","ম্যান্ডেলা","মাও"],a:1},
-{q:"ভিয়েতনাম পুনরায় একত্রিত হয়?",o:["১৯৭৫","১৯৭৬","১৯৭৩","১৯৫৪"],a:1},
-{q:"রাষ্ট্রীয় নাম কী?",o:["গণপ্রজাতন্ত্রী","ফেডারেশন","সমাজতান্ত্রিক প্রজাতন্ত্র","গ্রেটার"],a:2}
-];
+let time = 60;
+let started = false;
+let timer;
 
-let i=0,answers=new Array(questions.length).fill(null);
-let time=300,student="";
-
-// START
-function startExam(){
- student=document.getElementById("name").value;
- if(!student){alert("নাম লেখো");return;}
- loginBox.classList.add("hidden");
- quizBox.classList.remove("hidden");
- load();
- startTimer();
-}
-
-// LOAD QUESTION
-function load(){
- qno.innerText=`প্রশ্ন ${i+1}/${questions.length}`;
- document.querySelector(".question").innerText=questions[i].q;
-
- let html="";
- questions[i].o.forEach((x,j)=>{
-   let cls=answers[i]===j?"selected":"";
-   html+=`<button class="${cls}" onclick="answer(${j})">${x}</button>`;
- });
- document.querySelector(".options").innerHTML=html;
-
- bar.style.width=((answers.filter(x=>x!==null).length/questions.length)*100)+"%";
- navigator();
-}
-
-// ANSWER + AUTO JUMP TO NEXT UNANSWERED
-function answer(a){
-  answers[i] = a;
-
-  let next = -1;
-
-  // সামনে unanswered খোঁজা
-  for(let j = i + 1; j < questions.length; j++){
-    if(answers[j] === null){
-      next = j;
-      break;
-    }
-  }
-
-  // সামনে না পেলে পেছনে খোঁজা
-  if(next === -1){
-    for(let j = 0; j < i; j++){
-      if(answers[j] === null){
-        next = j;
-        break;
-      }
-    }
-  }
-
-  if(next !== -1){
-    i = next;
-  }
-
-  load();
-}
-
-// NAV (answered question = blue)
-function navigator(){
- let n="";
- for(let j=0;j<questions.length;j++){
-   let cls = answers[j] !== null ? "answered" : "";
-   n+=`<button class="${cls}" onclick="go(${j})">${j+1}</button>`;
- }
- nav.innerHTML=n;
-}
-
-function go(x){
- i=x;
- load();
-}
-
-// TIMER
-function startTimer(){
- let t=setInterval(()=>{
-   let m=Math.floor(time/60);
-   let s=time%60;
-   timer.innerText=`সময় ${m}:${String(s).padStart(2,"0")}`;
+function start(){
+ if(started) return;
+ started = true;
+ document.getElementById("input").value="";
+ time = 60;
+ timer = setInterval(()=>{
    time--;
-   if(time<0){clearInterval(t);finish();}
+   document.getElementById("timer").innerText="সময়: "+time+"s";
+   if(time<=0){
+     clearInterval(timer);
+     document.getElementById("input").disabled=true;
+   }
  },1000);
 }
 
-function finish(){
- let score=0;
- let reviewHTML="";
+function check(){
+ let text = document.getElementById("text").innerText;
+ let input = document.getElementById("input").value;
 
- answers.forEach((a,idx)=>{
-   let isCorrect = a===questions[idx].a;
-   if(isCorrect) score++;
+ let correct = 0;
+ for(let i=0;i<input.length;i++){
+   if(input[i] === text[i]) correct++;
+ }
 
-   reviewHTML+=`
-   <div class="review-item ${isCorrect?"correct":"wrong"}">
-     <p><b>প্রশ্ন ${idx+1}:</b> ${questions[idx].q}</p>
-     <p>🟢 সঠিক উত্তর: ${questions[idx].o[questions[idx].a]}</p>
-     <p>🔵 তোমার উত্তর: ${a!==null ? questions[idx].o[a] : "উত্তর দাওনি"}</p>
-   </div>`;
- });
+ let accuracy = ((correct / text.length) * 100).toFixed(2);
+ document.getElementById("accuracy").innerText="Accuracy: "+accuracy+"%";
 
- quizBox.classList.add("hidden");
- resultBox.classList.remove("hidden");
-
- studentEl.innerText="পরীক্ষার্থী: "+student;
- correct.innerText="✅ সঠিক: "+score;
- wrong.innerText="❌ ভুল: "+(questions.length-score);
- scoreEl.innerText=`মোট স্কোর: ${score}/${questions.length}`;
- accuracy.innerText=`Accuracy: ${((score/questions.length)*100).toFixed(2)}%`;
-
- // show review
- document.getElementById("reviewBox").classList.remove("hidden");
- document.getElementById("reviewList").innerHTML=reviewHTML;
+ let words = input.trim().split(/\s+/).length;
+ let wpm = Math.round((words / (60-time)) * 60 || 0);
+ document.getElementById("wpm").innerText="WPM: "+wpm;
 }
-
-// RESTART
-function restart(){location.reload();}
-
-// shortcuts
-const loginBox=document.getElementById("loginBox");
-const quizBox=document.getElementById("quizBox");
-const resultBox=document.getElementById("resultBox");
-const qno=document.getElementById("qno");
-const timer=document.getElementById("timer");
-const bar=document.getElementById("bar");
-const nav=document.getElementById("nav");
-const studentEl=document.getElementById("student");
-const correct=document.getElementById("correct");
-const wrong=document.getElementById("wrong");
-const scoreEl=document.getElementById("score");
-const accuracy=document.getElementById("accuracy");
 </script>
 
 </body>
