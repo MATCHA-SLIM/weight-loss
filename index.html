@@ -1,277 +1,519 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>কাবুলিওয়ালা গল্পের বহুনির্বাচনী কুইজ MCQ | Board Exam</title>
+
+<title>Vector MCQ Quiz | Board Exam</title>
+
+<!-- MathJax -->
+<script>
+window.MathJax = {
+ tex: {inlineMath: [['\\(','\\)'], ['$', '$']]}
+};
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
 
 <style>
+
 body{
-    font-family: Arial, sans-serif;
-    background:#eef1f4;
-    margin:0;
+font-family:Arial;
+background:#eef1f4;
+margin:0;
 }
+
 .container{
-    max-width:650px;
-    margin:20px auto;
-    background:#fff;
-    padding:20px;
-    border-radius:8px;
-    box-shadow:0 3px 8px rgba(0,0,0,.1);
+max-width:650px;
+margin:20px auto;
+background:#fff;
+padding:20px;
+border-radius:8px;
+box-shadow:0 3px 8px rgba(0,0,0,.1);
 }
+
 h1,h2{text-align:center}
-input,button{padding:10px;margin:5px 0}
-button{cursor:pointer}
-.hidden{display:none}
-.top{display:flex;justify-content:space-between;font-weight:bold}
-.question{font-size:18px;margin:15px 0}
+
+input,button{
+padding:10px;
+margin:5px 0;
+}
+
+button{
+cursor:pointer;
+}
+
+.hidden{
+display:none;
+}
+
+.top{
+display:flex;
+justify-content:space-between;
+font-weight:bold;
+}
+
+.question{
+font-size:20px;
+margin:15px 0;
+}
+
 .options button{
-    width:100%;
-    text-align:left;
-    border:1px solid #bbb;
-    background:#f9f9f9;
+
+width:100%;
+text-align:left;
+border:1px solid #bbb;
+background:#f9f9f9;
+margin:4px 0;
+
 }
+
 .options button.selected{
-    background:#dbeafe;
-    border-color:#2563eb;
+
+background:#dbeafe;
+border-color:#2563eb;
+
 }
-.nav button{margin:2px;width:35px}
-.progress{height:8px;background:#ddd;margin:10px 0}
-.progress div{height:100%;background:#3498db;width:0%}
-.review-item{border:1px solid #ddd;padding:10px;margin:10px 0;border-radius:6px}
-.review-item.correct{background:#e6fffa}
-.review-item.wrong{background:#ffe6e6}
+
+.nav button{
+
+margin:2px;
+width:35px;
+
+}
+
 .nav button.answered{
-    background:#2563eb;
-    color:#fff;
-    border-color:#2563eb;
+
+background:#2563eb;
+color:#fff;
+
 }
+
+.progress{
+
+height:8px;
+background:#ddd;
+margin:10px 0;
+
+}
+
+.progress div{
+
+height:100%;
+background:#3498db;
+width:0%;
+
+}
+
+.review-item{
+
+border:1px solid #ddd;
+padding:10px;
+margin:10px 0;
+
+}
+
+.correct{
+
+background:#e6fffa;
+
+}
+
+.wrong{
+
+background:#ffe6e6;
+
+}
+
 </style>
+
 </head>
 
 <body>
 
+
 <!-- LOGIN -->
+
 <div class="container" id="loginBox">
+
 <h1>পরীক্ষার্থী লগইন</h1>
+
 <input id="name" placeholder="তোমার নাম লেখো">
+
 <button onclick="startExam()">Start Exam</button>
+
 </div>
+
+
 
 <!-- QUIZ -->
+
 <div class="container hidden" id="quizBox">
+
 <div class="top">
+
 <div id="qno"></div>
+
 <div id="timer"></div>
+
 </div>
 
-<div class="progress"><div id="bar"></div></div>
+<div class="progress">
+<div id="bar"></div>
+</div>
+
 <div class="question"></div>
+
 <div class="options"></div>
+
 <div class="nav" id="nav"></div>
 
 <button onclick="finish()">Submit</button>
+
 </div>
+
+
 
 <!-- RESULT -->
+
 <div class="container hidden" id="resultBox">
-<h2>📊 পরীক্ষার ফলাফল</h2>
+
+<h2>ফলাফল</h2>
+
 <p id="student"></p>
+
 <p id="correct"></p>
+
 <p id="wrong"></p>
+
 <p id="score"></p>
+
 <p id="accuracy"></p>
-<button onclick="restart()">🔄 আবার শুরু করো</button>
+
+<button onclick="restart()">আবার শুরু</button>
+
 </div>
+
+
 
 <!-- REVIEW -->
+
 <div class="container hidden" id="reviewBox">
-<h2>📝 Answer Review</h2>
+
+<h2>Answer Review</h2>
+
 <div id="reviewList"></div>
-<button onclick="restart()">🔄 আবার শুরু করো</button>
+
 </div>
 
+
+
 <script>
-/* ===== JULY MOVEMENT MCQ ===== */
 
-const questions = [
 
-{q:"x-অক্ষের সাথে 30° কোণে একটি ভেক্টরের মান |⃗A|=2 এবং y-অক্ষ বরাবর |⃗B|=3 হলে |⃗A−⃗B| কত?",
+
+/* QUESTIONS */
+
+const questions=[
+
+
+{q:"\\( |\\vec{A}|=2, |\\vec{B}|=3 \\) হলে \\( |\\vec{A}-\\vec{B}| \\) কত?",
+
 o:["2.628","3.6148","2.646","1.5168"],a:2},
 
-{q:"4 km/h স্রোতে মাঝি 5 km/h বেগে নৌকা চালায়। ঠিক বিপরীত পারে যেতে কত কোণে চালাতে হবে?",
-o:["120°","90°","136.37°","143.13°"],a:3},
 
-{q:"স্রোতের বেগ 5 m/s এবং নৌকার বেগ 10 m/s। 1 ঘন্টায় সোজা পার হলে নদীর প্রস্থ কত?",
-o:["30 km","31 km","32 km","29 km"],a:1},
+{q:"\\( \\vec{a}\\perp\\vec{b} \\) হলে \\( (\\vec{a}+\\vec{b})\\cdot(\\vec{a}-\\vec{b}) \\) কত?",
 
-{q:"⃗A, +x অক্ষের সাথে 30° কোণে এবং ⃗B, −y অক্ষ বরাবর। |⃗A|=4, |⃗B|=8 হলে ⃗A+⃗B কত?",
-o:["2√3 î + 6ĵ","√7 î − 3ĵ","2√3 î − 6ĵ","None"],a:2},
-
-{q:"⃗a এবং ⃗b সমান ও পরস্পর লম্ব হলে (⃗a+⃗b)·(⃗a−⃗b) কত?",
 o:["0","2a","4a","None"],a:0},
 
-{q:"দুটি সমান ভেক্টরের লব্ধি শূন্য হলে কোণ কত?",
-o:["90°","0°","180°","270°"],a:2},
 
-{q:"একটি ভেক্টর x-অক্ষের সাথে 130° কোণে। −y অক্ষের সাথে কোণ কত?",
-o:["−130°","140°","40°","−40°"],a:1},
+{q:"\\( \\vec{A}\\cdot\\vec{B}=0 \\) হলে কোণ কত?",
 
-{q:"⃗F=(5î−6ĵ+3k̂), ⃗d=(3î+dĵ+5k̂)। কাজ শূন্য হলে d কত?",
-o:["1","0","6","5"],a:3},
+o:["90°","30°","45°","60°"],a:0}
 
-{q:"⃗R₁=(3î−2ĵ+7k̂), ⃗R₂=(5î+6ĵ−3k̂) সামান্তরিকের কর্ণ। ক্ষেত্রফল কত?",
-o:["32.14","31.68","29.05","18.55"],a:1},
-
-{q:"বৃষ্টি 6 km/h উলম্বে পড়ে। লোক 4 km/h হাঁটে। আপেক্ষিক বেগ কত?",
-o:["7.01","8.21","7.0","9.01","7.21"],a:4},
-
-{q:"দুটি সমান ভেক্টরের লব্ধি তাদের সমান হলে কোণ কত?",
-o:["0°","60°","120°","30°","90°"],a:2},
-
-{q:"⃗A=5î−4ĵ+2k̂, ⃗B=3î−3ĵ+1k̂ সামান্তরিকের বাহু। ক্ষেত্রফল কত?",
-o:["√7","√14","2√14","None","2√7"],a:2},
-
-{q:"দুটি ভেক্টরের মান 5 এবং কোণ 120°। লব্ধি কত?",
-o:["5","25","0","15","None"],a:0},
-
-{q:"বৃহত্তর লব্ধি 28, ক্ষুদ্রতর 4 হলে 90° কোণে লব্ধি কত?",
-o:["None","28","24","20"],a:3},
-
-{q:"⃗V=(x+y+az)î+(bx+3y−z)ĵ+(3x+ey+z)k̂ অঘূর্ণনশীল হলে (a,b,e) কত?",
-o:["(−3,1,−1)","(3,−1,−1)","(3,1,−1)","(3,2,−1)"],a:2},
-
-{q:"(2î−3ĵ)·[(î+ĵ−k̂)×(3î−k̂)] কত?",
-o:["4","−4","8","None"],a:0},
-
-{q:"⃗A=(3î+ĵ−2k̂), ⃗B=(2î−ĵ−k̂)। সামান্তরিকের ক্ষেত্রফল কত?",
-o:["5.92","10.39","2.56","2.76","2.96"],a:0},
-
-{q:"Dot=20 এবং Cross=6√2 হলে কোণ কত?",
-o:["30°","22°59′","23.58°","24°2′","22°14′"],a:1},
-
-{q:"(aî−2ĵ+k̂) এবং (2aî+aĵ−4k̂) লম্ব হলে a কত?",
-o:["3,1","−2,1","1,5","2,4","3,2"],a:1},
-
-{q:"⃗A=3î−2ĵ+5k̂, ⃗B=î+6ĵ−k̂। সামান্তরিকের ক্ষেত্রফল কত?",
-o:["10.95","17.66","18.97","17.6","15.74"],a:1},
-
-{q:"⃗A=2î+2ĵ−k̂, ⃗B=6î−3ĵ+2k̂। কোণ কত?",
-o:["77°","79°","78°","80°","81°"],a:1},
-
-{q:"⃗A=î−3ĵ+5k̂, ⃗B=mî+6ĵ−10k̂ সমান্তরাল হলে m কত?",
-o:["−2","1","−1","3","2"],a:0},
-
-{q:"একটি ভেক্টর অন্যটির দ্বিগুণ এবং লব্ধি বড়টির সমান হলে কোণ কত?",
-o:["arcsin(1/2)","arccos(−1/4)","arccos(1/2)","arcsin(−1/2)"],a:1},
-
-{q:"কোনটি স্কেলার?",
-o:["তড়িৎক্ষেত্র, বিভব","বল, তাপমাত্রা","গতিশক্তি, বেগ","চার্জ, কম্পাঙ্ক"],a:3},
-
-{q:"সামান্তরিকের ক্ষেত্রফল কোনটি?",
-o:["½|⃗A×⃗B|","⃗A×⃗B","½(⃗A×⃗B)","|⃗A×⃗B|"],a:3},
-
-{q:"⃗A·⃗B=0 হলে কোণ কত?",
-o:["90°","30°","45°","75°"],a:0}
 
 ];
 
-/* প্রতি প্রশ্ন ১ মিনিট */
-let i=0,answers=new Array(questions.length).fill(null);
+
+
+let i=0;
+
+let answers=new Array(questions.length).fill(null);
+
 let time=questions.length*60;
+
 let student="";
 
-/* ===== rest code unchanged ===== */
+
+
 function startExam(){
- student=document.getElementById("name").value;
- if(!student){alert("নাম লেখো");return;}
- loginBox.classList.add("hidden");
- quizBox.classList.remove("hidden");
- load(); startTimer();
+
+student=document.getElementById("name").value;
+
+if(!student){
+
+alert("নাম লেখো");
+
+return;
+
 }
+
+loginBox.classList.add("hidden");
+
+quizBox.classList.remove("hidden");
+
+load();
+
+startTimer();
+
+}
+
+
 
 function load(){
- qno.innerText=`প্রশ্ন ${i+1}/${questions.length}`;
- document.querySelector(".question").innerText=questions[i].q;
- let html="";
- questions[i].o.forEach((x,j)=>{
-   let cls=answers[i]===j?"selected":"";
-   html+=`<button class="${cls}" onclick="answer(${j})">${x}</button>`;
- });
- document.querySelector(".options").innerHTML=html;
- bar.style.width=((answers.filter(x=>x!==null).length/questions.length)*100)+"%";
- navigator();
+
+
+qno.innerHTML="প্রশ্ন "+(i+1)+"/"+questions.length;
+
+
+document.querySelector(".question").innerHTML=questions[i].q;
+
+
+let html="";
+
+
+questions[i].o.forEach((x,j)=>{
+
+
+let cls=answers[i]==j?"selected":"";
+
+
+html+=`<button class="${cls}" onclick="answer(${j})">${x}</button>`;
+
+
+});
+
+
+document.querySelector(".options").innerHTML=html;
+
+
+MathJax.typeset();
+
+
+bar.style.width=(answers.filter(x=>x!=null).length/questions.length*100)+"%";
+
+
+navigator();
+
+
 }
+
+
 
 function answer(a){
- answers[i]=a;
- let next=-1;
- for(let j=i+1;j<questions.length;j++) if(answers[j]===null){next=j;break;}
- if(next===-1) for(let j=0;j<i;j++) if(answers[j]===null){next=j;break;}
- if(next!==-1) i=next;
- load();
+
+answers[i]=a;
+
+
+let next=answers.indexOf(null);
+
+
+if(next!=-1)i=next;
+
+
+load();
+
+
 }
+
+
 
 function navigator(){
- let n="";
- for(let j=0;j<questions.length;j++){
-   let cls=answers[j]!==null?"answered":"";
-   n+=`<button class="${cls}" onclick="go(${j})">${j+1}</button>`;
- }
- nav.innerHTML=n;
+
+
+let n="";
+
+
+for(let j=0;j<questions.length;j++){
+
+
+let cls=answers[j]!=null?"answered":"";
+
+
+n+=`<button class="${cls}" onclick="go(${j})">${j+1}</button>`;
+
+
 }
 
-function go(x){i=x;load();}
+
+nav.innerHTML=n;
+
+
+}
+
+
+
+function go(x){
+
+i=x;
+
+load();
+
+}
+
+
 
 function startTimer(){
- let t=setInterval(()=>{
-   let m=Math.floor(time/60);
-   let s=time%60;
-   timer.innerText=`সময় ${m}:${String(s).padStart(2,"0")}`;
-   time--; if(time<0){clearInterval(t);finish();}
- },1000);
+
+
+let t=setInterval(()=>{
+
+
+let m=Math.floor(time/60);
+
+
+let s=time%60;
+
+
+timer.innerHTML="সময় "+m+":"+s;
+
+
+time--;
+
+
+if(time<0){
+
+clearInterval(t);
+
+finish();
+
 }
+
+
+},1000);
+
+
+}
+
+
 
 function finish(){
- let score=0,reviewHTML="";
- answers.forEach((a,idx)=>{
-   let ok=a===questions[idx].a;
-   if(ok) score++;
-   reviewHTML+=`
-   <div class="review-item ${ok?"correct":"wrong"}">
-   <p><b>প্রশ্ন ${idx+1}:</b> ${questions[idx].q}</p>
-   <p>🟢 সঠিক উত্তর: ${questions[idx].o[questions[idx].a]}</p>
-   <p>🔵 তোমার উত্তর: ${a!==null?questions[idx].o[a]:"উত্তর দাওনি"}</p>
-   </div>`;
- });
- quizBox.classList.add("hidden");
- resultBox.classList.remove("hidden");
- studentEl.innerText="পরীক্ষার্থী: "+student;
- correct.innerText="✅ সঠিক: "+score;
- wrong.innerText="❌ ভুল: "+(questions.length-score);
- scoreEl.innerText=`মোট স্কোর: ${score}/${questions.length}`;
- accuracy.innerText=`Accuracy: ${((score/questions.length)*100).toFixed(2)}%`;
- reviewBox.classList.remove("hidden");
- reviewList.innerHTML=reviewHTML;
+
+
+let score=0;
+
+
+let reviewHTML="";
+
+
+answers.forEach((a,idx)=>{
+
+
+let ok=a==questions[idx].a;
+
+
+if(ok)score++;
+
+
+reviewHTML+=`
+
+
+<div class="review-item ${ok?"correct":"wrong"}">
+
+
+<p>${questions[idx].q}</p>
+
+
+<p>সঠিক: ${questions[idx].o[questions[idx].a]}</p>
+
+
+<p>তোমার: ${a!=null?questions[idx].o[a]:"উত্তর দাওনি"}</p>
+
+
+</div>
+
+
+`;
+
+
+});
+
+
+quizBox.classList.add("hidden");
+
+
+resultBox.classList.remove("hidden");
+
+
+student.innerHTML="নাম: "+student;
+
+
+correct.innerHTML="সঠিক: "+score;
+
+
+wrong.innerHTML="ভুল: "+(questions.length-score);
+
+
+scoreEl.innerHTML="স্কোর: "+score;
+
+
+accuracy.innerHTML="Accuracy: "+(score/questions.length*100).toFixed(2)+"%";
+
+
+reviewBox.classList.remove("hidden");
+
+
+reviewList.innerHTML=reviewHTML;
+
+
+MathJax.typeset();
+
+
 }
 
-function restart(){location.reload();}
+
+
+function restart(){
+
+location.reload();
+
+}
+
+
 
 const loginBox=document.getElementById("loginBox");
+
 const quizBox=document.getElementById("quizBox");
+
 const resultBox=document.getElementById("resultBox");
-const qno=document.getElementById("qno");
-const timer=document.getElementById("timer");
-const bar=document.getElementById("bar");
-const nav=document.getElementById("nav");
-const studentEl=document.getElementById("student");
-const correct=document.getElementById("correct");
-const wrong=document.getElementById("wrong");
-const scoreEl=document.getElementById("score");
-const accuracy=document.getElementById("accuracy");
+
 const reviewBox=document.getElementById("reviewBox");
+
 const reviewList=document.getElementById("reviewList");
+
+const qno=document.getElementById("qno");
+
+const timer=document.getElementById("timer");
+
+const bar=document.getElementById("bar");
+
+const nav=document.getElementById("nav");
+
+const correct=document.getElementById("correct");
+
+const wrong=document.getElementById("wrong");
+
+const scoreEl=document.getElementById("score");
+
+const accuracy=document.getElementById("accuracy");
+
+
+
 </script>
 
+
 </body>
+
 </html>
