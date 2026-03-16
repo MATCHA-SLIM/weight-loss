@@ -1,744 +1,276 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Vector MCQ Quiz | Board Exam</title>
-
-<!-- MathJax -->
-<script>
-window.MathJax = {
- tex: {inlineMath: [['\\(','\\)'], ['$', '$']]}
-};
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-
+<title>কোষ ও DNA অধ্যায় MCQ কুইজ | Board Exam</title>
 <style>
-
 body{
-font-family:Arial;
-background:#eef1f4;
-margin:0;
+    font-family: Arial, sans-serif;
+    background:#eef1f4;
+    margin:0;
 }
-
 .container{
-max-width:650px;
-margin:20px auto;
-background:#fff;
-padding:20px;
-border-radius:8px;
-box-shadow:0 3px 8px rgba(0,0,0,.1);
+    max-width:650px;
+    margin:20px auto;
+    background:#fff;
+    padding:20px;
+    border-radius:8px;
+    box-shadow:0 3px 8px rgba(0,0,0,.1);
 }
-
 h1,h2{text-align:center}
-
-input,button{
-padding:10px;
-margin:5px 0;
-}
-
-button{
-cursor:pointer;
-}
-
-.hidden{
-display:none;
-}
-
-.top{
-display:flex;
-justify-content:space-between;
-font-weight:bold;
-}
-
-.question{
-font-size:20px;
-margin:15px 0;
-}
-
+input,button{padding:10px;margin:5px 0}
+button{cursor:pointer}
+.hidden{display:none}
+.top{display:flex;justify-content:space-between;font-weight:bold}
+.question{font-size:18px;margin:15px 0}
 .options button{
-
-width:100%;
-text-align:left;
-border:1px solid #bbb;
-background:#f9f9f9;
-margin:4px 0;
-
+    width:100%;
+    text-align:left;
+    border:1px solid #bbb;
+    background:#f9f9f9;
 }
-
 .options button.selected{
-
-background:#dbeafe;
-border-color:#2563eb;
-
+    background:#dbeafe;
+    border-color:#2563eb;
 }
-
-.nav button{
-
-margin:2px;
-width:35px;
-
-}
-
+.nav button{margin:2px;width:35px}
+.progress{height:8px;background:#ddd;margin:10px 0}
+.progress div{height:100%;background:#3498db;width:0%}
+.review-item{border:1px solid #ddd;padding:10px;margin:10px 0;border-radius:6px}
+.review-item.correct{background:#e6fffa}
+.review-item.wrong{background:#ffe6e6}
 .nav button.answered{
-
-background:#2563eb;
-color:#fff;
-
+    background:#2563eb;
+    color:#fff;
+    border-color:#2563eb;
 }
-
-.progress{
-
-height:8px;
-background:#ddd;
-margin:10px 0;
-
-}
-
-.progress div{
-
-height:100%;
-background:#3498db;
-width:0%;
-
-}
-
-.review-item{
-
-border:1px solid #ddd;
-padding:10px;
-margin:10px 0;
-
-}
-
-.correct{
-
-background:#e6fffa;
-
-}
-
-.wrong{
-
-background:#ffe6e6;
-
-}
-
 </style>
-
 </head>
 
 <body>
 
-
 <!-- LOGIN -->
-
 <div class="container" id="loginBox">
-
 <h1>পরীক্ষার্থী লগইন</h1>
-
 <input id="name" placeholder="তোমার নাম লেখো">
-
 <button onclick="startExam()">Start Exam</button>
-
 </div>
-
-
 
 <!-- QUIZ -->
-
 <div class="container hidden" id="quizBox">
-
 <div class="top">
-
 <div id="qno"></div>
-
 <div id="timer"></div>
-
 </div>
 
-<div class="progress">
-<div id="bar"></div>
-</div>
-
+<div class="progress"><div id="bar"></div></div>
 <div class="question"></div>
-
 <div class="options"></div>
-
 <div class="nav" id="nav"></div>
 
 <button onclick="finish()">Submit</button>
-
 </div>
-
-
 
 <!-- RESULT -->
-
 <div class="container hidden" id="resultBox">
-
-<h2>ফলাফল</h2>
-
+<h2>📊 পরীক্ষার ফলাফল</h2>
 <p id="student"></p>
-
 <p id="correct"></p>
-
 <p id="wrong"></p>
-
 <p id="score"></p>
-
 <p id="accuracy"></p>
-
-<button onclick="restart()">আবার শুরু</button>
-
+<button onclick="restart()">🔄 আবার শুরু করো</button>
 </div>
-
-
 
 <!-- REVIEW -->
-
 <div class="container hidden" id="reviewBox">
-
-<h2>Answer Review</h2>
-
+<h2>📝 Answer Review</h2>
 <div id="reviewList"></div>
-
+<button onclick="restart()">🔄 আবার শুরু করো</button>
 </div>
-
-
 
 <script>
-
-
-
-/* QUESTIONS */
-
+/* ===== JULY MOVEMENT MCQ ===== */
 const questions = [
 
-{
-q:"1. x-অক্ষ বরাবর থেকে 30° একটি ভেক্টর \\( |\\vec{A}| = 2 \\); y অক্ষ বরাবর হতে \\( |\\vec{B}| = 3 \\) তবে \\( |\\vec{A}-\\vec{B}| = ? \\)  [BUET Preli. 22-23]",
-o:["2.628","2.646","3.6148","1.5168"],
-a:1
-},
+{q:"পাখির মুখে কী ঠাসা হচ্ছিল?", 
+o:["দানা","পানি","পুথির পাতা","ফল"], 
+a:2},
 
-{
-q:"2. 4 kmh⁻¹ বেগে প্রবাহমান স্রোতযুক্ত নদীতে কত কোণে নৌকা চালালে 5 kmh⁻¹ বেগে নৌকা চালাতে সক্ষম একজন মাঝি ঠিক অপর পাড়ে পৌঁছাতে পারবে?  [BUET Preli. 22-23]",
-o:["120°","90°","136.37°","143.1301°"],
-a:3
-},
+{q:"পাখির গান কেন বন্ধ হয়ে গেল?", 
+o:["সে অসুস্থ ছিল","মুখে পুথির পাতা ভরা ছিল","খাঁচা ছোট ছিল","রাজা নিষেধ করেছিলেন"], 
+a:1},
 
-{
-q:"3. 5 ms⁻¹ বেগে প্রবাহমান স্রোত বিশিষ্ট একটি নদীতে 10 ms⁻¹ বেগে চলমান নৌকা 1 hour যাত্রা করে সোজা অপর পাড়ে গিয়ে পৌঁছায়। তাহলে নদীর প্রস্থ কত হবে?  [BUET Preli. 22-23]",
-o:["30 km","31 km","32 km","29 km"],
-a:1
-},
+{q:"রাজা কাকে কান মলানোর আদেশ দিলেন?", 
+o:["পণ্ডিতকে","ভাগিনাকে","নিন্দুককে","কোতোয়ালকে"], 
+a:2},
 
-{
-q:"4. একটি ভেক্টর \\( \\vec{A} \\), 30° কোণে ধনাত্মক x-অক্ষের দিকে ক্রিয়াশীল। অপর একটি ভেক্টর \\( \\vec{B} \\) ঋণাত্মক y-অক্ষের দিকে ক্রিয়াশীল। \\( |\\vec{A}|=4, |\\vec{B}|=8 \\) হলে, লব্ধি ভেক্টর কোনটি?",
-o:[
-"\\(2\\sqrt{3}\\hat{i}+6\\hat{j}\\)",
-"\\(\\sqrt{7}\\hat{i}-3\\hat{j}\\)",
-"\\(2\\sqrt{3}\\hat{i}-6\\hat{j}\\)",
-"None"
-],
-a:2
-},
+{q:"পাখিটি দিনে দিনে কেমন হয়ে যাচ্ছিল?", 
+o:["শক্তিশালী","আনন্দিত","আধমরা","বুদ্ধিমান"], 
+a:2},
 
-{
-q:"5. \\( \\vec{a} \\) ও \\( \\vec{b} \\) দুটি সমান ভেক্টর সমকোণে ক্রিয়া করলে \\((\\vec{a}+\\vec{b})\\cdot(\\vec{a}-\\vec{b})\\) এর মান কত?",
-o:["0","4a","2a","None"],
-a:0
-},
+{q:"পাখি খাঁচার শলা কাটার চেষ্টা করলে কে বলল “এ কী বেয়াদবি”?", 
+o:["রাজা","পণ্ডিত","কোতোয়াল","ভাগিনা"], 
+a:2},
 
-{
-q:"6. দুটি সমান ভেক্টরের লব্ধি নাল ভেক্টর হলে ভেক্টরদ্বয়ের মধ্যবর্তী কোণ কত?",
-o:["90°","180°","0°","270°"],
-a:1
-},
+{q:"পাখির ডানার কী করা হয়েছিল?", 
+o:["বড় করা হয়েছিল","রং করা হয়েছিল","কেটে ফেলা হয়েছিল","বেঁধে রাখা হয়েছিল"], 
+a:2},
 
-{
-q:"7. xy সমতলে একটি ভেক্টর x-অক্ষের সাথে 130° কোণ তৈরি করে। ভেক্টরটি ঋণাত্মক y-অক্ষের সাথে কত কোণ তৈরি করবে?",
-o:["−130°","40°","140°","−40°"],
-a:2
-},
+{q:"শেষে পাখিটির কী হয়েছিল?", 
+o:["উড়ে গিয়েছিল","অসুস্থ হয়েছিল","মারা গিয়েছিল","বনে ফিরে গিয়েছিল"], 
+a:2},
 
-{
-q:"8. একটি কণার উপর \\( \\vec{F}=(5\\hat{i}-6\\hat{j}+3\\hat{k}) \\) এবং সরণ \\( \\vec{d}=(3\\hat{i}+d\\hat{j}+5\\hat{k}) \\)। কাজ শূন্য হলে d কত?",
-o:["0","5","6","−6"],
-a:1
-},
+{q:"ভাগিনা রাজাকে কী বলেছিল?", 
+o:["পাখি অসুস্থ","পাখি পালিয়ে গেছে","পাখির শিক্ষা সম্পূর্ণ হয়েছে","পাখি গান গাইছে"], 
+a:2},
 
-{
-q:"9. \\( \\vec{R}_1=3\\hat{i}-2\\hat{j}+7\\hat{k} \\) এবং \\( \\vec{R}_2=5\\hat{i}+6\\hat{j}-3\\hat{k} \\)। সামান্তরিকের ক্ষেত্রফল কত?",
-o:["32.14 m²","18.55 units","31.68 units","33.64 cm²"],
-a:2
-},
+{q:"রাজা যখন পাখিটাকে টিপলেন তখন কী হলো?", 
+o:["পাখি গান গাইল","পাখি উড়ল","পাখি চিৎকার করল","কিছুই করল না"], 
+a:3},
 
-{
-q:"10. হাঁটে চলা লোকটির সাপেক্ষে বৃষ্টির বেগ কত?",
-o:["7.01 km/hr","9.01 km/hr","8.21 km/hr","7.21 km/hr"],
-a:3
-},
+{q:"পাখির পেটের মধ্যে কী শব্দ হচ্ছিল?", 
+o:["দানার শব্দ","পানির শব্দ","পুথির শুকনো পাতার খসখস শব্দ","বাতাসের শব্দ"], 
+a:2},
 
-{
-q:"11. দুটি সমান মানের ভেক্টরের লব্ধির মান কোন অবস্থায় ভেক্টর প্রত্যেকের মানের সমান হতে পারে?",
-o:["0°","30°","60°","90°","120°"],
-a:4
-},
+{q:"রবীন্দ্রনাথ ঠাকুর কত সালে জন্মগ্রহণ করেন?", 
+o:["১৮৫৭","১৮৬১","১৮৬৫","১৮৭০"], 
+a:1},
 
-{
-q:"12. যদি \\( \\vec{A}=5\\hat{i}-4\\hat{j}+2\\hat{k} \\) এবং \\( \\vec{B}=3\\hat{i}-3\\hat{j}+\\hat{k} \\), ক্ষেত্রফল কত?",
-o:[
-"\\(\\sqrt{7}\\)",
-"\\(2\\sqrt{7}\\)",
-"\\(\\sqrt{14}\\)",
-"\\(2\\sqrt{14}\\)",
-"None"
-],
-a:3
-},
+{q:"রবীন্দ্রনাথ ঠাকুর কোথায় জন্মগ্রহণ করেন?", 
+o:["ঢাকা","কলকাতার জোড়াসাঁকো","শান্তিনিকেতন","চট্টগ্রাম"], 
+a:1},
 
-{
-q:"13. দুটি ভেক্টরের মান 5 একক এবং কোণ 120° হলে লব্ধি কত?",
-o:["5 unit","0 unit","25 unit","15 unit","None"],
-a:0
-},
+{q:"রবীন্দ্রনাথ ঠাকুরের পিতার নাম কী?", 
+o:["দেবেন্দ্রনাথ ঠাকুর","দ্বিজেন্দ্রনাথ ঠাকুর","জ্যোতিরিন্দ্রনাথ ঠাকুর","হেমেন্দ্রনাথ ঠাকুর"], 
+a:0},
 
-{
-q:"14. দুটি ভেক্টর পরস্পর লম্ব হলে লব্ধি কত?",
-o:["None","28 unit","24 unit","20 unit"],
-a:3
-},
+{q:"রবীন্দ্রনাথ ঠাকুরের মাতার নাম কী?", 
+o:["কাদম্বিনী দেবী","সারদাসুন্দরী দেবী","মৃণালিনী দেবী","স্বর্ণকুমারী দেবী"], 
+a:1},
 
-{
-q:"15. \\( \\vec{V}=(x+y+az)\\hat{i}+(bx+3y-z)\\hat{j}+(3x+cy+z)\\hat{k} \\) অঘূর্ণনশীল হলে (a,b,c) কত?",
-o:["(3,1,1)","(3,−1,−1)","(−3,1,−1)","(3,1,−1)"],
-a:3
-},
+{q:"রবীন্দ্রনাথ ঠাকুর কত সালে নোবেল পুরস্কার লাভ করেন?", 
+o:["১৯০৫","১৯১০","১৯১৩","১৯২০"], 
+a:2},
 
-{
-q:"16. \\((2\\hat{i}-3\\hat{j})\\cdot[(\\hat{i}+\\hat{j}-\\hat{k})\\times(3\\hat{i}-\\hat{k})]\\) এর মান কত?",
-o:["4","8","−4","None"],
-a:0
-},
+{q:"তিনি কোন বিষয়ে নোবেল পুরস্কার পান?", 
+o:["পদার্থবিজ্ঞান","সাহিত্য","অর্থনীতি","শান্তি"], 
+a:1},
 
-{
-q:"17. \\( \\vec{A}=(3\\hat{i}+\\hat{j}-2\\hat{k}), \\vec{B}=(2\\hat{i}-\\hat{j}-\\hat{k}) \\)। ক্ষেত্রফল কত?",
-o:["5.92 m²","2.76 m²","10.39 m²","2.96 m²","2.56 m²"],
-a:0
-},
+{q:"রবীন্দ্রনাথ ঠাকুর কত সালে মৃত্যুবরণ করেন?", 
+o:["১৯৩৫","১৯৪১","১৯৪৫","১৯৫০"], 
+a:1},
 
-{
-q:"18. যদি \\( \\vec{A}\\cdot\\vec{B}=20 \\), এবং \\(|\\vec{A}\\times\\vec{B}|=6\\sqrt{2}\\), কোণ কত?",
-o:["30°","24°2′","22°59′","22°14′","23.58′"],
-a:2
-},
+{q:"‘তোতা-কাহিনি’ গল্পে পাখির জন্য কী তৈরি করা হয়েছিল?", 
+o:["কাঠের খাঁচা","লোহার খাঁচা","সোনার খাঁচা","রুপার খাঁচা"], 
+a:2},
 
-{
-q:"19. \\( \\vec{a}_1=2\\hat{j}+\\hat{k} \\) এবং \\(2a\\hat{i}-a\\hat{j}-4\\hat{k}\\) পরস্পর লম্ব হলে a কত?",
-o:["3,1","2,4","−2,1","3,2","1,5"],
-a:2
-},
+{q:"পাখির শিক্ষার দায়িত্ব কার ওপর দেওয়া হয়েছিল?", 
+o:["সৈন্যদের","রাজার ভাগিনাদের","পণ্ডিতদের","কোতোয়ালদের"], 
+a:1},
 
-{
-q:"20. সামান্তরিকের কর্ণ \\( \\vec{A}=3\\hat{i}-2\\hat{j}+5\\hat{k} \\), \\( \\vec{B}=\\hat{i}+6\\hat{j}-\\hat{k} \\)। ক্ষেত্রফল কত?",
-o:["10.95","17.6","17.66","15.74","18.97"],
-a:2
-},
-
-{
-q:"21. দুটি ভেক্টর \\((\\vec A = 2\\hat i + 2\\hat j - \\hat k)\\) এবং \\((\\vec B = 6\\hat i - 3\\hat j + 2\\hat k)\\) হলে, এদের অন্তর্ভুক্ত কোণ কত?  [K UET 13-14, 12-13, 09-10]",
-o:["77°","78°","79°","80°","81°"],
-a:2
-},
-
-{
-q:"22. m এর মান কত হলে \\((\\vec A = \\hat i - 3\\hat j + 5\\hat k)\\) এবং \\((\\vec B = m\\hat i + 6\\hat j - 10\\hat k)\\) ভেক্টরদ্বয় পরস্পর লম্ব হবে?  [K UET 10-11; SUST 16-17]",
-o:["−2","−1","1","2","3"],
-a:0
-},
- 
-{
-q:"23. If \\(\\phi = 2xy^4 - x^2 z\\), then determine \\(\\nabla \\phi\\) at point \\((2, -1, 2)\\).  [IUT 21-22]",
-o:[
-"\\( -(16\\hat{i} + 16\\hat{j} + 4\\hat{k}) \\)",
-"\\( (-6\\hat{i} + 4\\hat{j} + 4\\hat{k}) \\)",
-"\\( (-6\\hat{i} + 6\\hat{j} + 4\\hat{k}) \\)",
-"\\( (6\\hat{i} + 16\\hat{j} + 4\\hat{k}) \\)"
-],
-a:3
-},
-
-{
-q:"24. A solenoidal vector field is given as \\((\\vec V = (5x + 2y)\\hat i + (my − z)\\hat j + (x − 4z)\\hat k)\\). What is the value of m?  [IUT 21-22]",
-o:["−2","−1","1","3"],
-a:1
-},
-
-{
-q:"25. \\((\\vec F = (-2\\hat i + 3\\hat j + 4\\hat k))\\) N force is applied on a particle and the particle moves from (3, −4, −2) to (−2, 3, 5). What is the amount of work done?  [IUT 18-19]",
-o:["7 J","59 J","49 J","59 N"],
-a:1
-},
-
-{
-q:"26. A river flows toward the east. You head your boat 53° west of north and achieve a velocity of 6.0 ms⁻¹ due north relative to the shore. What is your speed relative to the water?  [IUT 18-19]",
-o:["8 ms⁻¹","6 ms⁻¹","10 ms⁻¹","12 ms⁻¹"],
-a:2
-},
-
-{
-q:"27. A plane has an air speed of 240 kmh⁻¹. What should be the plane’s heading if it is to travel due north, relative to earth in a wind blowing with a velocity of 100 kmh⁻¹ in an easterly direction?  [IUT 17-18]",
-o:["24.62°","2.462°","2462°","42.62°"],
-a:0
-},
-
-{
-q:"28. যদি \\((\\vec P = 2\\hat i + 4\\hat j - 5\\hat k)\\) এবং \\((\\vec Q = -\\hat i + 2\\hat j + 3\\hat k)\\) হয়, P এবং Q এর মধ্যবর্তী কোণ কত?  [K UET 16-17]",
-o:["111.01°","110.49°","101.49°","69°","68.98°"],
-a:0
-},
-
-{
-q:"29. An airplane flies due west at 185 kmh⁻¹ with respect to the air. There is a wind blowing at 85 kmh⁻¹ to the northeast relative to the ground. What is the plane’s speed with respect to the ground?  [IUT 16-17]",
-o:["139 kmh⁻¹","230 kmh⁻¹","239 kmh⁻¹","179 kmh⁻¹"],
-a:0
-},
-
-{
-q:"30. A particle has 3 velocities 10 ms⁻¹, 20 ms⁻¹ and 30 ms⁻¹ inclined at an angle of 120° to one another. The magnitude of the resultant velocity is—  [IUT 14-15]",
-o:["10√3 ms⁻¹","10 ms⁻¹","5 ms⁻¹","√3 ms⁻¹"],
-a:0
-},
-
-{
-q:"31. The pilot of a private plane flies 20.0 km in a direction 60° north of east, then 30.0 km straight east, then 10.0 km straight north. How far the plane is from the starting point?  [IUT 11-12]",
-o:["58.44 km","34.44 km","48.44 km","46.44 km"],
-a:2
-},
-
-{
-q:"32. The maximum value of the resultant of two vectors is 7 units and minimum value of those is 1 unit. When the vectors are acting on a point at right angle, the resultant will be—  [IUT 10-11]",
-o:["2 units","3 units","4 units","5 units"],
-a:3
-},
-
-{
-q:"33. দুটি ভেক্টরের মধ্যে একটি অপরটির দ্বিগুণ এবং এদের লব্ধির মান বড় ভেক্টরটির সমান হলে ভেক্টরদ্বয়ের মধ্যকার কোণ হবে—  [BUTex 16-17]",
-o:["cos⁻¹(1/2)","cos⁻¹(-1/2)","cos⁻¹(1/2)","cos⁻¹(1/2)"],
-a:1
-},
-
-{
-q:"34. দুটি সমান ভেক্টর কোন এক বিন্দুতে ক্রিয়াশীল। তাদের লব্ধির মান যেকোন একটি ভেক্টরের মানের সমান। ভেক্টরদের মধ্যবর্তী কোণ কত?  [BUTex 15-16]",
-o:["45°","90°","120°","15°"],
-a:2
-},
-
-{
-q:"35. কোন দুটি স্কেলার রাশি?  [BUTex 14-15]",
-o:["তড়িৎক্ষেত্র, তড়িৎ বিভব","গতিশক্তি, বেগ","ক্ষেত্রফল, তাপমাত্রা","চার্জ, ফ্লাক্স"],
-a:3
-},
-
-{
-q:"36. কোনটি সামান্তরিকের ক্ষেত্রফল?  [BUTex 12-13]",
-o:[
-"\\(\\tfrac{1}{2} |\\vec{A} \\times \\vec{B}|\\)",
-"\\(\\vec{A} \\times \\vec{B}\\)",
-"\\(\\tfrac{1}{2} (\\vec{A} \\times \\vec{B})\\)",
-"\\(|\\vec{A} \\times \\vec{B}|\\)"
-],
-a:3
-},
- 
-{
-q:"37. যদি \\(\\vec A \\cdot \\vec B = 0\\), তবে A ও B এর মধ্যবর্তী কোণ কত?  [BUTex 11-12]",
-o:["0°","90°","30°","45°"],
-a:1
-}
+{q:"‘তোতা-কাহিনি’ গল্পের মূল বিষয় কী?", 
+o:["পাখির জীবন","প্রকৃতির সৌন্দর্য","অপশিক্ষার কুফল","রাজনীতির গল্প"], 
+a:2}
 
 ];
-
-let i=0;
-
-let answers=new Array(questions.length).fill(null);
-
-let time=questions.length*60;
-
+/* প্রতি প্রশ্ন ০.৭৫ মিনিট */
+let i=0,answers=new Array(questions.length).fill(null);
+let time=questions.length*45;
 let student="";
 
-
-
+/* ===== rest code unchanged ===== */
 function startExam(){
-
-student=document.getElementById("name").value;
-
-if(!student){
-
-alert("নাম লেখো");
-
-return;
-
+ student=document.getElementById("name").value;
+ if(!student){alert("নাম লেখো");return;}
+ loginBox.classList.add("hidden");
+ quizBox.classList.remove("hidden");
+ load(); startTimer();
 }
-
-loginBox.classList.add("hidden");
-
-quizBox.classList.remove("hidden");
-
-load();
-
-startTimer();
-
-}
-
-
 
 function load(){
-
-
-qno.innerHTML="প্রশ্ন "+(i+1)+"/"+questions.length;
-
-
-document.querySelector(".question").innerHTML=questions[i].q;
-
-
-let html="";
-
-
-questions[i].o.forEach((x,j)=>{
-
-
-let cls=answers[i]==j?"selected":"";
-
-
-html+=`<button class="${cls}" onclick="answer(${j})">${x}</button>`;
-
-
-});
-
-
-document.querySelector(".options").innerHTML=html;
-
-
-MathJax.typeset();
-
-
-bar.style.width=(answers.filter(x=>x!=null).length/questions.length*100)+"%";
-
-
-navigator();
-
-
+ qno.innerText=`প্রশ্ন ${i+1}/${questions.length}`;
+ document.querySelector(".question").innerText=questions[i].q;
+ let html="";
+ questions[i].o.forEach((x,j)=>{
+   let cls=answers[i]===j?"selected":"";
+   html+=`<button class="${cls}" onclick="answer(${j})">${x}</button>`;
+ });
+ document.querySelector(".options").innerHTML=html;
+ bar.style.width=((answers.filter(x=>x!==null).length/questions.length)*100)+"%";
+ navigator();
 }
-
-
 
 function answer(a){
-
-answers[i]=a;
-
-
-let next=answers.indexOf(null);
-
-
-if(next!=-1)i=next;
-
-
-load();
-
-
+ answers[i]=a;
+ let next=-1;
+ for(let j=i+1;j<questions.length;j++) if(answers[j]===null){next=j;break;}
+ if(next===-1) for(let j=0;j<i;j++) if(answers[j]===null){next=j;break;}
+ if(next!==-1) i=next;
+ load();
 }
-
-
 
 function navigator(){
-
-
-let n="";
-
-
-for(let j=0;j<questions.length;j++){
-
-
-let cls=answers[j]!=null?"answered":"";
-
-
-n+=`<button class="${cls}" onclick="go(${j})">${j+1}</button>`;
-
-
+ let n="";
+ for(let j=0;j<questions.length;j++){
+   let cls=answers[j]!==null?"answered":"";
+   n+=`<button class="${cls}" onclick="go(${j})">${j+1}</button>`;
+ }
+ nav.innerHTML=n;
 }
 
-
-nav.innerHTML=n;
-
-
-}
-
-
-
-function go(x){
-
-i=x;
-
-load();
-
-}
-
-
+function go(x){i=x;load();}
 
 function startTimer(){
-
-
-let t=setInterval(()=>{
-
-
-let m=Math.floor(time/60);
-
-
-let s=time%60;
-
-
-timer.innerHTML="সময় "+m+":"+s;
-
-
-time--;
-
-
-if(time<0){
-
-clearInterval(t);
-
-finish();
-
+ let t=setInterval(()=>{
+   let m=Math.floor(time/60);
+   let s=time%60;
+   timer.innerText=`সময় ${m}:${String(s).padStart(2,"0")}`;
+   time--; if(time<0){clearInterval(t);finish();}
+ },1000);
 }
-
-
-},1000);
-
-
-}
-
-
 
 function finish(){
-
-
-let score=0;
-
-
-let reviewHTML="";
-
-
-answers.forEach((a,idx)=>{
-
-
-let ok=a==questions[idx].a;
-
-
-if(ok)score++;
-
-
-reviewHTML+=`
-
-
-<div class="review-item ${ok?"correct":"wrong"}">
-
-
-<p>${questions[idx].q}</p>
-
-
-<p>সঠিক: ${questions[idx].o[questions[idx].a]}</p>
-
-
-<p>তোমার: ${a!=null?questions[idx].o[a]:"উত্তর দাওনি"}</p>
-
-
-</div>
-
-
-`;
-
-
-});
-
-
-quizBox.classList.add("hidden");
-
-
-resultBox.classList.remove("hidden");
-
-
-student.innerHTML="নাম: "+student;
-
-
-correct.innerHTML="সঠিক: "+score;
-
-
-wrong.innerHTML="ভুল: "+(questions.length-score);
-
-
-scoreEl.innerHTML="স্কোর: "+score;
-
-
-accuracy.innerHTML="Accuracy: "+(score/questions.length*100).toFixed(2)+"%";
-
-
-reviewBox.classList.remove("hidden");
-
-
-reviewList.innerHTML=reviewHTML;
-
-
-MathJax.typeset();
-
-
+ let score=0,reviewHTML="";
+ answers.forEach((a,idx)=>{
+   let ok=a===questions[idx].a;
+   if(ok) score++;
+   reviewHTML+=`
+   <div class="review-item ${ok?"correct":"wrong"}">
+   <p><b>প্রশ্ন ${idx+1}:</b> ${questions[idx].q}</p>
+   <p>🟢 সঠিক উত্তর: ${questions[idx].o[questions[idx].a]}</p>
+   <p>🔵 তোমার উত্তর: ${a!==null?questions[idx].o[a]:"উত্তর দাওনি"}</p>
+   </div>`;
+ });
+ quizBox.classList.add("hidden");
+ resultBox.classList.remove("hidden");
+ studentEl.innerText="পরীক্ষার্থী: "+student;
+ correct.innerText="✅ সঠিক: "+score;
+ wrong.innerText="❌ ভুল: "+(questions.length-score);
+ scoreEl.innerText=`মোট স্কোর: ${score}/${questions.length}`;
+ accuracy.innerText=`Accuracy: ${((score/questions.length)*100).toFixed(2)}%`;
+ reviewBox.classList.remove("hidden");
+ reviewList.innerHTML=reviewHTML;
 }
 
-
-
-function restart(){
-
-location.reload();
-
-}
-
-
+function restart(){location.reload();}
 
 const loginBox=document.getElementById("loginBox");
-
 const quizBox=document.getElementById("quizBox");
-
 const resultBox=document.getElementById("resultBox");
-
-const reviewBox=document.getElementById("reviewBox");
-
-const reviewList=document.getElementById("reviewList");
-
 const qno=document.getElementById("qno");
-
 const timer=document.getElementById("timer");
-
 const bar=document.getElementById("bar");
-
 const nav=document.getElementById("nav");
-
+const studentEl=document.getElementById("student");
 const correct=document.getElementById("correct");
-
 const wrong=document.getElementById("wrong");
-
 const scoreEl=document.getElementById("score");
-
 const accuracy=document.getElementById("accuracy");
-
-
-
+const reviewBox=document.getElementById("reviewBox");
+const reviewList=document.getElementById("reviewList");
 </script>
 
-
 </body>
-
 </html>
